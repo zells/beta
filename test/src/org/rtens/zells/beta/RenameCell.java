@@ -3,6 +3,9 @@ package org.rtens.zells.beta;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * Renaming a cell is equivalent with deleting and re-creating it.
+ */
 public class RenameCell {
 
     @Test
@@ -36,6 +39,11 @@ public class RenameCell {
 //        whenIRename_To("foo/bar", "baz");
 //        then_ShouldNotExist("foo/bar");
 //        thenThereShouldBeACell("foo/baz");
+    }
+
+    @Test
+    @Ignore
+    public void _RenameAdoptedCell() {
     }
 
     @Test

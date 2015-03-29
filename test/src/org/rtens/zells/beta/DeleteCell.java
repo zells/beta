@@ -1,9 +1,11 @@
 package org.rtens.zells.beta;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * Only own children can be deleted, not inherited ones.
+ */
 public class DeleteCell {
 
     @Test

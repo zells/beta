@@ -3,6 +3,9 @@ package org.rtens.zells.beta;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * When a message is delivered, the receiver's Response is executed with the full path of the message.
+ */
 public class DeliverMessage {
 
     @Test
@@ -27,5 +30,10 @@ public class DeliverMessage {
 //        givenACell_WithTheStem("bar", "/foo");
 //        whenISend_To("message", "bar/one");
 //        thenTheResponseOf_ShouldBeExecutedInTheContextOf("foo/one", "bar/one");
+    }
+
+    @Test
+    @Ignore
+    public void _ResolveMessagePath() {
     }
 }

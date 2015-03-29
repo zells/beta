@@ -3,6 +3,9 @@ package org.rtens.zells.beta;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * Cells are always created as a child of an existing cell. It gets a default stem cell which can later be changed.
+ */
 public class CreateCell {
 
     @Test
@@ -38,7 +41,7 @@ public class CreateCell {
 
     @Test
     @Ignore
-    public void _DefaultStempCell() {
+    public void _DefaultStemCell() {
 //        givenACell("foo");
 //        whenICreate_Under("bar", "foo");
 //        thenTheStemCellOf_ShouldBe("foo/bar", "/zells/Cell");

@@ -3,6 +3,9 @@ package org.rtens.zells.beta;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * Inherited and own children are listed together but can still be differentiated.
+ */
 public class ListChildren {
 
     @Test
@@ -62,6 +65,9 @@ public class ListChildren {
 //        then_ShouldBeAChild("two");
 //        then_ShouldBeAChild("three");
 //        thenTheStemCellOf_ShouldBe("bar/two", "ofBar");
+//        then_ShouldBeInherited("bar/one");
+//        then_ShouldNotBeInherited("bar/two");
+//        then_ShouldBeAnOwnChild("bar/three");
     }
 
     @Test
@@ -72,15 +78,7 @@ public class ListChildren {
 //        givenACell_WithTheStem("baz", "/bar");
 //        whenIListTheChildrenOf("baz");
 //        thenIShouldGet_Cells(1);
-    }
-
-    @Test
-    @Ignore
-    public void _CatchInheritanceLoop() {
-//        givenACell_WithTheStem("foo", "/baz");
-//        givenACell_WithTheStem("bar", "/foo");
-//        givenACell_WithTheStem("baz", "/bar");
-//        whenIListTheChildrenOf("baz");
-//        thenItShouldThrowAnException("Inheritance loop detected.");
+//        then_ShouldBeInherited("bar/one");
+//        then_ShouldBeInherited("baz/one");
     }
 }

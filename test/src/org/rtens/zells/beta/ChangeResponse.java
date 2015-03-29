@@ -3,6 +3,10 @@ package org.rtens.zells.beta;
 import org.junit.Ignore;
 import org.junit.Test;
 
+/**
+ * Responses are always completely overwritten with a new Response instance. Which instances are supported
+ * depends on the actual model.
+ */
 public class ChangeResponse {
 
     @Test
