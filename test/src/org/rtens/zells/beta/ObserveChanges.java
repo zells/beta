@@ -69,4 +69,14 @@ public class ObserveChanges {
 //        thenIShouldBeNotifiedAboutThe_Cell("deleted", "foo/bar");
 //        thenIShouldBeNotifiedAboutThe_Cell("created", "foo/baz");
     }
+
+    @Test
+    @Ignore
+    public void _StopObservation() {
+//        givenACell("foo");
+//        givenIAmObserving("foo");
+//        whenIStopObserving("foo");
+//        whenICreate_Under("bar", "foo");
+//        thenIShouldGetNotification();
+    }
 }
