@@ -4,7 +4,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * When a message is delivered, the receiver's Response is executed with the full path of the message.
+ * When a message is delivered, the receiver's Response is executed with the path of the message,
+ * relative to the receiver.
  */
 public class DeliverMessage {
 
@@ -32,8 +33,4 @@ public class DeliverMessage {
 //        thenTheResponseOf_ShouldBeExecutedInTheContextOf("foo/one", "bar/one");
     }
 
-    @Test
-    @Ignore
-    public void _ResolveMessagePath() {
-    }
 }
