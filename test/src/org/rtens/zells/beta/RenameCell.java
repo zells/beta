@@ -44,6 +44,13 @@ public class RenameCell {
     @Test
     @Ignore
     public void _RenameAdoptedCell() {
+//        givenACell("foo/one");
+//        givenACell_WithTheStem("bar", "/foo");
+//        givenACell("bar/one");
+//        whenIRename_To("bar/one", "two");
+//        thenThereShouldBeACell("bar/two");
+//        there_ShouldNotExist("bar/one");
+//        thenThereShouldBeACell("foo/one");
     }
 
     @Test
