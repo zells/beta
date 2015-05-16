@@ -2,6 +2,7 @@ package org.rtens.zells.beta;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.rtens.zells.beta.model.SerialEngine;
 
 public class CellsTest {
 
@@ -11,7 +12,7 @@ public class CellsTest {
 
     @Before
     public void before() {
-        engine = new Engine();
+        engine = new SerialEngine();
     }
 
     protected void givenTheCell(String path) {

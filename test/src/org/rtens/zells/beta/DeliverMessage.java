@@ -2,6 +2,7 @@ package org.rtens.zells.beta;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.rtens.zells.beta.model.Cell;
 
 import java.util.HashMap;
 import java.util.Map;

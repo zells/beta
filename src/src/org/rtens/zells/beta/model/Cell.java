@@ -1,4 +1,7 @@
-package org.rtens.zells.beta;
+package org.rtens.zells.beta.model;
+
+import org.rtens.zells.beta.Path;
+import org.rtens.zells.beta.Reaction;
 
 import java.util.HashSet;
 import java.util.Set;

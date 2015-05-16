@@ -1,6 +1,7 @@
 package org.rtens.zells.beta;
 
 abstract public class CellEvent {
+
     private final Path path;
 
     public CellEvent(Path path) {
