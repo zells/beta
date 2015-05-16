@@ -88,6 +88,22 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
+    public void _OverwriteStem() {
+        givenACell("foo.one");
+        givenACell_WithTheStem("bar", "°.foo");
+        givenACell_WithTheStem("baz", "°.bar.one");
+
+        whenIListTheChildrenOf("baz");
+        thenIShouldGet_Cells(0);
+
+        givenACell("bar.one.two");
+
+        whenIListTheChildrenOf("baz");
+        thenIShouldGet_Cells(1);
+        then_ShouldBeAChild("two");
+    }
+
+    @Test
     public void _InheritChildrenOfInheritedChildren() {
         givenACell_WithTheStem("meh", "°.baz");
         givenACell_WithTheStem("baz.one", "°.bar");
