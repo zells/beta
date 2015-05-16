@@ -11,7 +11,7 @@ public class ChangeStemCell extends CellsTest {
 
     @Test
     public void _SetNewStemCell() {
-        givenACell("foo.bar");
+        givenTheCell("foo.bar");
         whenISetTheStemOf_To("foo.bar", "some.cell");
         thenTheStemCellOf_ShouldBe("foo.bar", "some.cell");
     }

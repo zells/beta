@@ -19,7 +19,7 @@ public class ChangeResponse {
     @Test
     @Ignore
     public void _ChangeResponse() {
-//        givenACell("foo");
+//        givenTheCell("foo");
 //        whenISetTheResponseOf_To("foo", "A new response");
 //        thenTheResponseOf_ShouldBe("foo", "A new response");
     }
@@ -27,7 +27,7 @@ public class ChangeResponse {
     @Test
     @Ignore
     public void _AdoptInheritedCell() {
-//        givenACell("foo/one");
+//        givenTheCell("foo/one");
 //        givenTheResponseOf_Is("foo/one", "Old response");
 //        givenACell_WithTheStem("bar", "/foo");
 //        whenISetTheResponseOf_To("bar/one", "New response");

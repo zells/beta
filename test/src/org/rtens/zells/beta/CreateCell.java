@@ -11,34 +11,34 @@ public class CreateCell extends CellsTest {
 
     @Test
     public void _FailIfParentDoesNotExist() {
-        whenITryToCreate_Under("bar", "foo");
-        thenItShouldThrowAnException("Could not find [foo] in [°].");
+        whenITryToCreate_In("bar", "foo");
+        thenItShouldThrowAnException("Could not find [foo]");
     }
 
     @Test
     public void _FailIfNameIsEmpty() {
-        givenACell("foo");
-        whenITryToCreate_Under("", "foo");
-        thenItShouldThrowAnException("Cannot give a cell an empty name.");
+        givenTheCell("foo");
+        whenITryToCreate_In("", "foo");
+        thenItShouldThrowAnException("Cannot give a cell an empty name");
     }
 
     @Test
     public void _CreateNewChild() {
-        givenACell("foo");
+        givenTheCell("foo");
         whenICreate_In("bar", "foo");
         thenThereShouldBeACell("foo.bar");
     }
 
     @Test
     public void _FailIfChildAlreadyExists() {
-        givenACell("foo.bar");
-        whenITryToCreate_Under("bar", "foo");
-        thenItShouldThrowAnException("[°.foo] already has a child [bar].");
+        givenTheCell("foo.bar");
+        whenITryToCreate_In("bar", "foo");
+        thenItShouldThrowAnException("[foo.bar] already exists");
     }
 
     @Test
     public void _DefaultStemCell() {
-        givenACell("foo");
+        givenTheCell("foo");
         whenICreate_In("bar", "foo");
         thenTheStemCellOf_ShouldBe("foo.bar", "°.cell");
     }
@@ -46,7 +46,7 @@ public class CreateCell extends CellsTest {
     @Test
     @Ignore
     public void _AdoptInheritedCell() {
-        givenACell("foo.one");
+        givenTheCell("foo.one");
         givenACell_WithTheStem("bar", "°.foo");
 
         whenICreate_In("two", "bar.one");
@@ -59,7 +59,7 @@ public class CreateCell extends CellsTest {
     @Test
     @Ignore
     public void _AdoptInheritedGrandChild() {
-        givenACell("foo.one.two");
+        givenTheCell("foo.one.two");
         givenACell_WithTheStem("bar", "°.foo");
 
         whenICreate_In("three", "bar.one.two");
@@ -68,7 +68,7 @@ public class CreateCell extends CellsTest {
         thenTheStemCellOf_ShouldBe("bar.one", "°.foo.one");
     }
 
-    private void whenITryToCreate_Under(String child, String parent) {
+    private void whenITryToCreate_In(String child, String parent) {
         try {
             whenICreate_In(child, parent);
         } catch (Exception e) {

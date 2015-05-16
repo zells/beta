@@ -10,49 +10,48 @@ public class RenameCell extends CellsTest {
 
     @Test
     public void _FailIfCellDoesNotExist() {
-        givenACell("foo");
+        givenTheCell("foo");
         whenITryToRename_Of_To("bar", "foo", "baz");
-        thenItShouldThrowAnException("Could not find [bar] in [°.foo].");
+        thenItShouldThrowAnException("Could not find [bar]");
     }
 
     @Test
     public void _FailIfSiblingWithSameNameExists() {
-        givenACell("foo.bar");
-        givenACell("foo.baz");
+        givenTheCell("foo.bar");
+        givenTheCell("foo.baz");
         whenITryToRename_Of_To("bar", "foo", "baz");
-        thenItShouldThrowAnException("[°.foo] already has a child [baz].");
+        thenItShouldThrowAnException("[foo.baz] already exists");
     }
 
     @Test
     public void _FailIfNewNameIsEmpty() {
-        givenACell("foo.bar");
+        givenTheCell("foo.bar");
         whenITryToRename_Of_To("bar", "foo", "");
-        thenItShouldThrowAnException("Cannot give a cell an empty name.");
+        thenItShouldThrowAnException("Cannot give a cell an empty name");
     }
 
     @Test
     public void _RenameExistingCell() {
-        givenACell("foo.bar");
+        givenTheCell("foo.bar");
         whenIRename_Of_To("bar", "foo", "baz");
         then_ShouldHave_Children("foo", 1);
         then_ShouldBeAChildOf("baz", "foo");
     }
 
     @Test
-    @Ignore
     public void _FailIfCellIsInherited() {
-        givenACell("foo.one");
-        givenACell_WithTheStem("bar", "foo");
+        givenTheCell("foo.one");
+        givenACell_WithTheStem("bar", "°.foo");
         whenITryToRename_Of_To("one", "bar", "two");
-        thenItShouldThrowAnException("[°.bar] does not have the child [one].");
+        thenItShouldThrowAnException("Cannot rename an inherited cell");
     }
 
     @Test
     @Ignore
     public void _RenameAdoptedCell() {
-//        givenACell("foo.one");
+//        givenTheCell("foo.one");
 //        givenACell_WithTheStem("bar", "foo");
-//        givenACell("bar.one");
+//        givenTheCell("bar.one");
 //
 //        whenIRename_Of_To("one", "bar", "two");
 //

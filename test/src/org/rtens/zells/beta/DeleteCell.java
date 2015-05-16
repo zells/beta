@@ -1,6 +1,5 @@
 package org.rtens.zells.beta;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -11,22 +10,22 @@ public class DeleteCell extends CellsTest {
     @Test
     public void _FailIfCellDoesNotExist() {
         whenITryToDelete_Of("foo", "°");
-        thenItShouldThrowAnException("[°] does not have the child [foo].");
+        thenItShouldThrowAnException("Could not find [foo]");
     }
 
     @Test
     public void _DeleteExistingCell() {
-        givenACell("foo.bar");
+        givenTheCell("foo.bar");
         whenIDelete_Of("bar", "foo");
         then_ShouldHave_Children("foo", 0);
     }
 
     @Test
     public void _FailIfCellIsInherited() {
-        givenACell("foo.one");
-        givenACell_WithTheStem("bar", "foo");
+        givenTheCell("foo.one");
+        givenACell_WithTheStem("bar", "°.foo");
         whenITryToDelete_Of("one", "bar");
-        thenItShouldThrowAnException("[°.bar] does not have the child [one].");
+        thenItShouldThrowAnException("[bar.one] is inherited");
     }
 
     private void whenITryToDelete_Of(String child, String parent) {

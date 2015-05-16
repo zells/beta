@@ -1,7 +1,5 @@
 package org.rtens.zells.beta;
 
-import jdk.nashorn.internal.objects.NativeDate;
-
 import java.util.*;
 
 public class Cell {
@@ -12,40 +10,50 @@ public class Cell {
 
     public Cell(Cell parent, String name, Path stem) {
         this.parent = parent;
-        setName(name);
-        setStem(stem);
+        this.name = name;
+        this.stem = stem;
+    }
+
+    public Path getPath() {
+        if (parent != null) {
+            return parent.getPath().with(name);
+        }
+        return new Path(name);
     }
 
     public Path getStem() {
         return stem;
     }
 
+    public void setStem(Path stem) {
+        this.stem = stem;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void add(String name, Path stem) {
-        guardChildExistsNot(name);
         children.add(new Cell(this, name, stem));
+    }
+
+    public void remove(String name) {
+        for (Cell child : children) {
+            if (child.name.equals(name)) {
+                children.remove(child);
+            }
+        }
     }
 
     public Set<String> getChildren() {
         return collectChildren(new HashSet<Cell>());
     }
 
-    private Set<String> collectChildren(Set<Cell> visited) {
-        Set<String> names = getOwnChildren();
-        if (stem != null) {
-            guardAgainstInheritanceLoop(visited);
-            names.addAll(resolve(stem).collectChildren(visited));
-        }
-        return names;
-    }
-
-    private void guardAgainstInheritanceLoop(Set<Cell> visited) {
-        if (visited.contains(this)) {
-            throw new RuntimeException("Inheritance loop detected.");
-        }
-        visited.add(this);
-    }
-
-    private Set<String> getOwnChildren() {
+    public Set<String> getOwnChildren() {
         Set<String> names = new HashSet<String>();
         for (Cell child : children) {
             names.add(child.name);
@@ -53,66 +61,41 @@ public class Cell {
         return names;
     }
 
-    public void setStem(Path stem) {
-        this.stem = stem;
+    private Set<String> collectChildren(Set<Cell> visited) {
+        Set<String> names = getOwnChildren();
+        if (!visited.contains(this)) {
+            visited.add(this);
+            names.addAll(resolve(stem).collectChildren(visited));
+        }
+        return names;
     }
 
-    public void remove(String name) {
-        children.remove(findChild(name));
-    }
-
-    private Cell findChild(String name) {
+    private Cell findChild(String name, Set<Cell> visited) {
         for (Cell child : children) {
             if (child.name.equals(name)) {
                 return child;
             }
         }
-        throw new RuntimeException("[" + this + "] does not have the child [" + name + "].");
-    }
 
-    private Cell findInheritedChild(String name) {
-        try {
-            return findChild(name);
-        } catch (Exception e) {
-            try {
-                if (stem == null) {
-                    throw e;
-                }
-                return resolve(stem).findInheritedChild(name);
-            } catch (Exception e1) {
-                throw new RuntimeException("Could not find [" + name + "] in [" + this + "].", e);
-            }
-        }
-    }
-
-    private void guardChildExistsNot(String name) {
-        try {
-            findChild(name);
-        } catch (Exception ignored) {
-            return;
+        if (!visited.contains(this)) {
+            visited.add(this);
+            return new InheritedCell(this, doResolve(stem, visited).findChild(name, visited));
         }
 
-        throw new RuntimeException("[" + this + "] already has a child [" + name + "].");
-    }
-
-    public void setName(String name) {
-        if (name.isEmpty()) {
-            throw new RuntimeException("Cannot give a cell an empty name.");
-        }
-        if (parent != null) {
-            parent.guardChildExistsNot(name);
-        }
-
-        this.name = name;
+        throw new RuntimeException("Could not find [" + name + "]");
     }
 
     public Cell resolve(Path path) {
+        return doResolve(path, new HashSet<Cell>());
+    }
+
+    private Cell doResolve(Path path, Set<Cell> visited) {
         Cell cell = this;
         for (String name : path.getParts()) {
             if (name.equals("°")) {
                 cell = getRoot();
             } else {
-                cell = cell.findInheritedChild(name);
+                cell = cell.findChild(name, visited);
             }
         }
         return cell;
@@ -125,19 +108,8 @@ public class Cell {
         return this;
     }
 
-    public Path getPath() {
-        if (parent != null) {
-            return parent.getPath().with(name);
-        }
-        return new Path(name);
-    }
-
     @Override
     public String toString() {
         return getPath().toString();
-    }
-
-    public String getName() {
-        return name;
     }
 }

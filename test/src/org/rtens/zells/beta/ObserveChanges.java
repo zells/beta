@@ -18,7 +18,7 @@ public class ObserveChanges {
     @Test
     @Ignore
     public void _NotifyAboutNewChild() {
-//        givenACell("foo");
+//        givenTheCell("foo");
 //        givenIAmObserving("foo");
 //        whenICreate_Under("bar", "foo");
 //        thenIShouldBeNotifiedAboutNewCell("foo/bar");
@@ -27,7 +27,7 @@ public class ObserveChanges {
     @Test
     @Ignore
     public void _NotifyAboutNewGrandChild() {
-//        givenACell("foo/bar");
+//        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
 //        whenICreate_Under("baz", "foo/bar");
 //        thenIShouldNeNotifiedAboutThe_Cell("created", "foo/bar/baz");
@@ -36,7 +36,7 @@ public class ObserveChanges {
     @Test
     @Ignore
     public void _NotifyAboutDeletedCell() {
-//        givenACell("foo/bar/baz");
+//        givenTheCell("foo/bar/baz");
 //        givenIAmObserving("foo");
 //        whenIDelete("foo/bar/baz");
 //        thenIShouldBeNotifiedAboutThe_Cell("deleted", "foo/bar/baz");
@@ -45,7 +45,7 @@ public class ObserveChanges {
     @Test
     @Ignore
     public void _NotifyAboutChangedStem() {
-//        givenACell("foo/bar");
+//        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
 //        whenIChangeTheStemOf_To("foo/bar", "new/stem");
 //        thenIShouldBeNotifiedAboutThe_Cell("changedStem", "foo/bar");
@@ -54,7 +54,7 @@ public class ObserveChanges {
     @Test
     @Ignore
     public void _NotifyAboutChangedResponse() {
-//        givenACell("foo/bar");
+//        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
 //        whenIChangeTheResponseOf("foo/bar");
 //        thenIShouldBeNotifiedAboutThe_Cell("changedResponse", "foo/bar");
@@ -63,7 +63,7 @@ public class ObserveChanges {
     @Test
     @Ignore
     public void _NotifyAboutChangedName() {
-//        givenACell("foo/bar");
+//        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
 //        whenIChangeTheNameOf_To("foo/bar", "baz");
 //        thenIShouldBeNotifiedAboutThe_Cell("deleted", "foo/bar");
@@ -73,7 +73,7 @@ public class ObserveChanges {
     @Test
     @Ignore
     public void _StopObservation() {
-//        givenACell("foo");
+//        givenTheCell("foo");
 //        givenIAmObserving("foo");
 //        whenIStopObserving("foo");
 //        whenICreate_Under("bar", "foo");

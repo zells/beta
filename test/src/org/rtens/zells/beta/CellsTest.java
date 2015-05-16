@@ -14,7 +14,7 @@ public class CellsTest {
         engine = new Engine();
     }
 
-    protected void givenACell(String path) {
+    protected void givenTheCell(String path) {
         Path current = new Path();
         for (String name : Path.parse(path).getParts()) {
             try {
@@ -27,7 +27,7 @@ public class CellsTest {
     }
 
     protected void givenACell_WithTheStem(String path, String stem) {
-        givenACell(path);
+        givenTheCell(path);
         engine.setStem(Path.parse(path), Path.parse(stem));
     }
 

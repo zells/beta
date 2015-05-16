@@ -14,15 +14,15 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _NoChildren() {
-        givenACell("foo");
+        givenTheCell("foo");
         whenIListTheChildrenOf("foo");
         thenIShouldGet_Cells(0);
     }
 
     @Test
     public void _WithChildren() {
-        givenACell("foo.bar");
-        givenACell("foo.baz");
+        givenTheCell("foo.bar");
+        givenTheCell("foo.baz");
         whenIListTheChildrenOf("foo");
         thenIShouldGet_Cells(2);
         then_ShouldBeAChild("bar");
@@ -31,9 +31,9 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _SortByName() {
-        givenACell("foo.baz");
-        givenACell("foo.meh");
-        givenACell("foo.bar");
+        givenTheCell("foo.baz");
+        givenTheCell("foo.meh");
+        givenTheCell("foo.bar");
         whenIListTheChildrenOf("foo");
         thenChild_ShouldBe(1, "bar");
         thenChild_ShouldBe(2, "baz");
@@ -42,8 +42,8 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _ListInheritedChildren() {
-        givenACell("foo.one");
-        givenACell("foo.two");
+        givenTheCell("foo.one");
+        givenTheCell("foo.two");
         givenACell_WithTheStem("bar", "°.foo");
         whenIListTheChildrenOf("bar");
         thenIShouldGet_Cells(2);
@@ -53,16 +53,16 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _MixOwnAndInheritedChildren() {
-        givenACell("of.foo");
-        givenACell("of.bar");
+        givenTheCell("of.foo");
+        givenTheCell("of.bar");
 
-        givenACell("foo.one");
+        givenTheCell("foo.one");
         givenACell_WithTheStem("foo.two", "°.of.foo");
 
         givenACell_WithTheStem("bar", "°.foo");
         givenACell_WithTheStem("bar.two", "°.of.bar");
 
-        givenACell("bar.three");
+        givenTheCell("bar.three");
 
         whenIListTheChildrenOf("bar");
 
@@ -83,7 +83,7 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _InheritInheritedChildren() {
-        givenACell("foo.one");
+        givenTheCell("foo.one");
         givenACell_WithTheStem("bar", "°.foo");
         givenACell_WithTheStem("baz", "°.bar");
 
@@ -95,14 +95,14 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _OverwriteStem() {
-        givenACell("foo.one");
+        givenTheCell("foo.one");
         givenACell_WithTheStem("bar", "°.foo");
         givenACell_WithTheStem("baz", "°.bar.one");
 
         whenIListTheChildrenOf("baz");
         thenIShouldGet_Cells(0);
 
-        givenACell("bar.one.two");
+        givenTheCell("bar.one.two");
 
         whenIListTheChildrenOf("baz");
         thenIShouldGet_Cells(1);
@@ -114,7 +114,7 @@ public class ListChildren extends CellsTest {
         givenACell_WithTheStem("meh", "°.baz");
         givenACell_WithTheStem("baz.one", "°.bar");
         givenACell_WithTheStem("bar.two", "°.foo");
-        givenACell("foo.three");
+        givenTheCell("foo.three");
 
         whenIListTheChildrenOf("meh.one.two");
         thenIShouldGet_Cells(1);
@@ -124,7 +124,7 @@ public class ListChildren extends CellsTest {
     @Test
     public void _StemPathIsRelative() {
         givenACell_WithTheStem("foo.bar", "baz");
-        givenACell("foo.bar.baz.one");
+        givenTheCell("foo.bar.baz.one");
         whenIListTheChildrenOf("foo.bar");
 
         thenIShouldGet_Cells(2);
@@ -137,8 +137,17 @@ public class ListChildren extends CellsTest {
         givenACell_WithTheStem("foo", "°.baz");
         givenACell_WithTheStem("bar", "°.foo");
         givenACell_WithTheStem("baz", "°.bar");
+        whenIListTheChildrenOf("foo");
+        thenIShouldGet_Cells(0);
+
+    }
+
+    @Test
+    @Ignore
+    public void _NotExistingStem() {
+        givenACell_WithTheStem("foo", "bar");
         whenITryToListTheChildrenOf("foo");
-        thenItShouldThrowAnException("Inheritance loop detected.");
+        thenItShouldThrowAnException("Something");
     }
 
     private void whenITryToListTheChildrenOf(String path) {

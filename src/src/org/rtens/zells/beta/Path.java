@@ -30,6 +30,10 @@ public class Path {
         return new Path(childPath);
     }
 
+    public Path parent() {
+        return new Path(parts.subList(0, parts.size() - 1));
+    }
+
     public static Path parse(String path) {
         return new Path(Arrays.asList(path.split("\\.")));
     }
