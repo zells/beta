@@ -1,6 +1,7 @@
 package org.rtens.zells.beta;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -40,6 +41,28 @@ public class CreateCell extends CellsTest {
         givenACell("foo");
         whenICreate_In("bar", "foo");
         thenTheStemCellOf_ShouldBe("foo.bar", "°.cell");
+    }
+
+    @Test
+    @Ignore
+    public void _AdoptInheritedCell() {
+//        givenACell("foo");
+//        givenACell_WithTheStem("foo.one", "inherited");
+//        givenACell_WithTheStem("bar", "°.foo");
+//        whenICreate_In("two", "bar.one");
+//        thenThereShouldBeACell("bar.one.two");
+//        thenTheStemCellOf_ShouldBe("bar.one", "°.foo.one");
+//        then_ShouldNotExist("foo.one.two");
+    }
+
+    @Test
+    @Ignore
+    public void _AdoptInheritedGrandChild() {
+//        givenACell("foo.one.two");
+//        givenACell_WithTheStem("bar", "°.foo");
+//        whenICreate_In("three", "bar.one.two");
+//        thenTheStemCellOf_ShouldBe("bar.one.two", "°.foo.one.two");
+//        thenTheStemCellOf_ShouldBe("bar.one", "°.foo.one");
     }
 
     private void whenITryToCreate_Under(String child, String parent) {

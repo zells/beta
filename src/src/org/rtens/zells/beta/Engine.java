@@ -23,18 +23,28 @@ public class Engine {
     }
 
     public List<String> listChildren(Path path) {
-        Cell cell = resolve(path);
-        Set<String> children = getChildren(cell);
+        Set<String> children = getChildren(resolve(path), new HashSet<Path>());
 
         return sortStrings(children);
     }
 
-    private Set<String> getChildren(Cell cell) {
+    private Set<String> getChildren(Cell cell, Set<Path> stems) {
         Set<String> children = new HashSet<String>(cell.getChildren());
-        if (cell.getStem() != null) {
-            children.addAll(getChildren(resolve(cell.getStem(), cell)));
+
+        Path stem = cell.getStem();
+        if (stem != null) {
+            guardAgainstInheritanceLoop(stem, stems);
+            children.addAll(getChildren(resolve(stem, cell), stems));
         }
+
         return children;
+    }
+
+    private void guardAgainstInheritanceLoop(Path stem, Set<Path> stems) {
+        if (stems.contains(stem)) {
+            throw new RuntimeException("Inheritance loop detected.");
+        }
+        stems.add(stem);
     }
 
     private List<String> sortStrings(Set<String> children) {

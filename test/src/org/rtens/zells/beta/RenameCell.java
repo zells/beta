@@ -1,6 +1,5 @@
 package org.rtens.zells.beta;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -45,6 +44,23 @@ public class RenameCell extends CellsTest {
         givenACell_WithTheStem("bar", "foo");
         whenITryToRename_Of_To("one", "bar", "two");
         thenItShouldThrowAnException("Child [one] does not exist.");
+    }
+
+    @Test
+    @Ignore
+    public void _RenameAdoptedCell() {
+//        givenACell("foo.one");
+//        givenACell_WithTheStem("bar", "foo");
+//        givenACell("bar.one");
+//
+//        whenIRename_Of_To("one", "bar", "two");
+//
+//        then_ShouldHave_Children("bar", 2);
+//        then_ShouldBeAChildOf("one", "bar");
+//        then_ShouldBeAChildOf("two", "bar");
+//
+//        then_ShouldHave_Children("foo", 1);
+//        then_ShouldBeAChildOf("one", "foo");
     }
 
     private void whenITryToRename_Of_To(String name, String parent, String newName) {

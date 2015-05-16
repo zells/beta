@@ -110,6 +110,23 @@ public class ListChildren extends CellsTest {
         then_ShouldBeAChild("one");
     }
 
+    @Test
+    public void _CatchInheritanceLoop() {
+        givenACell_WithTheStem("foo", "°.baz");
+        givenACell_WithTheStem("bar", "°.foo");
+        givenACell_WithTheStem("baz", "°.bar");
+        whenITryToListTheChildrenOf("foo");
+        thenItShouldThrowAnException("Inheritance loop detected.");
+    }
+
+    private void whenITryToListTheChildrenOf(String path) {
+        try {
+            whenIListTheChildrenOf(path);
+        } catch (Exception e) {
+            caught = e;
+        }
+    }
+
     private List<String> children = new ArrayList<>();
 
     private void whenIListTheChildrenOf(String path) {
