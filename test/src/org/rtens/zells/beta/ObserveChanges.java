@@ -53,11 +53,11 @@ public class ObserveChanges {
 
     @Test
     @Ignore
-    public void NotifyAboutChangedResponse() {
+    public void NotifyAboutChangedReaction() {
 //        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
-//        whenIChangeTheResponseOf("foo/bar");
-//        thenIShouldBeNotifiedAboutThe_Cell("changedResponse", "foo/bar");
+//        whenIChangeTheReactionOf("foo/bar");
+//        thenIShouldBeNotifiedAboutThe_Cell("changedReaction", "foo/bar");
     }
 
     @Test

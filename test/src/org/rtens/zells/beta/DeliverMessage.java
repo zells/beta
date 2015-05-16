@@ -4,7 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * When a message is delivered, the receiver's Response is executed with the path of the message,
+ * When a message is delivered, the receiver's Reaction is executed with the path of the message,
  * relative to the receiver.
  */
 public class DeliverMessage {
@@ -21,7 +21,7 @@ public class DeliverMessage {
     public void DeliverMessageToCell() {
 //        givenTheCell("foo");
 //        whenISend_To("bar", "foo");
-//        thenTheResponseOf_ShouldBeExecutedWith("foo", "bar");
+//        thenTheReactionOf_ShouldBeExecutedWith("foo", "bar");
     }
 
     @Test
@@ -30,7 +30,7 @@ public class DeliverMessage {
 //        givenTheCell("foo/one");
 //        givenTheCell_WithTheStem("bar", "/foo");
 //        whenISend_To("message", "bar/one");
-//        thenTheResponseOf_ShouldBeExecutedInTheContextOf("foo/one", "bar/one");
+//        thenTheReactionOf_ShouldBeExecutedInTheContextOf("foo/one", "bar/one");
     }
 
 }
