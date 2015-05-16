@@ -6,7 +6,7 @@ public interface Engine {
 
     void send(Path cell, Path message);
 
-    void observe(Observer observer);
+    void observe(Path path, Observer observer);
 
     void create(Path parent, String name);
 

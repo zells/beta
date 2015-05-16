@@ -1,17 +1,21 @@
 package org.rtens.zells.beta.model;
 
+import org.rtens.zells.beta.CellEvent;
+import org.rtens.zells.beta.Observer;
 import org.rtens.zells.beta.Path;
 import org.rtens.zells.beta.Reaction;
+import org.rtens.zells.beta.events.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Cell {
+public class Cell implements Observer {
     private Cell parent;
     private String name;
     private Path stem;
     private Set<Cell> children = new HashSet<Cell>();
     private Reaction reaction;
+    private Set<Observer> observers = new HashSet<Observer>();
 
     public Cell(Cell parent, String name, Path stem) {
         this.parent = parent;
@@ -39,6 +43,7 @@ public class Cell {
 
     public void setStem(Path stem) {
         this.stem = stem;
+        fire(new ChangedStemEvent(getPath()));
     }
 
     public String getName() {
@@ -46,11 +51,14 @@ public class Cell {
     }
 
     public void setName(String name) {
+        Path oldPath = getPath();
         this.name = name;
+        fire(new CellRenamedEvent(oldPath));
     }
 
     public void setReaction(Reaction reaction) {
         this.reaction = reaction;
+        fire(new ChangedReactionEvent(getPath()));
     }
 
     public Reaction getReaction() {
@@ -66,7 +74,9 @@ public class Cell {
 
     public Cell add(String name, Path stem) {
         Cell child = new Cell(this, name, stem);
+        child.listen(this);
         children.add(child);
+        fire(new CellCreatedEvent(child.getPath()));
         return child;
     }
 
@@ -74,6 +84,8 @@ public class Cell {
         for (Cell child : children) {
             if (child.name.equals(name)) {
                 children.remove(child);
+                fire(new CellDeletedEvent(getPath().with(name)));
+                return;
             }
         }
     }
@@ -140,5 +152,20 @@ public class Cell {
     @Override
     public String toString() {
         return getPath().toString();
+    }
+
+    public void listen(Observer observer) {
+        observers.add(observer);
+    }
+
+    private void fire(CellEvent event) {
+        for (Observer o : observers) {
+            o.on(event);
+        }
+    }
+
+    @Override
+    public void on(CellEvent event) {
+        fire(event);
     }
 }

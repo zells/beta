@@ -1,18 +1,19 @@
 package org.rtens.zells.beta.model;
 
-import org.rtens.zells.beta.CellEvent;
 import org.rtens.zells.beta.Engine;
+import org.rtens.zells.beta.Observer;
 import org.rtens.zells.beta.Path;
 import org.rtens.zells.beta.Reaction;
-import org.rtens.zells.beta.events.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class SerialEngine implements Engine {
 
     private final Cell root;
     private final Path defaultStem = new Path("°", "cell");
-    private Set<org.rtens.zells.beta.Observer> observers = new HashSet<org.rtens.zells.beta.Observer>();
 
     public SerialEngine() {
         root = new Cell(null, "°", defaultStem);
@@ -23,14 +24,8 @@ public class SerialEngine implements Engine {
         resolve(cell).receive(message);
     }
 
-    public void observe(org.rtens.zells.beta.Observer observer) {
-        observers.add(observer);
-    }
-
-    private void fire(CellEvent event) {
-        for (org.rtens.zells.beta.Observer o : observers) {
-            o.on(event);
-        }
+    public void observe(Path path, Observer observer) {
+        resolve(path).listen(observer);
     }
 
     public void create(Path parent, String name) {
@@ -38,12 +33,10 @@ public class SerialEngine implements Engine {
         guardNotOwnChild(parent, name);
 
         resolve(parent).add(name, defaultStem);
-        fire(new CellCreatedEvent(parent.with(name)));
     }
 
     public void changeStem(Path cell, Path stem) {
         resolve(cell).setStem(stem);
-        fire(new ChangedStemEvent(cell));
     }
 
     public Path getStem(Path cell) {
@@ -55,7 +48,6 @@ public class SerialEngine implements Engine {
         guardOwnChild(parent, child);
 
         resolve(parent).remove(child);
-        fire(new CellDeletedEvent(parent.with(child)));
     }
 
     public void rename(Path path, String name) {
@@ -63,9 +55,6 @@ public class SerialEngine implements Engine {
         guardNotExisting(path.parent().with(name));
 
         resolve(path).setName(name);
-        fire(new CellRenamedEvent(path));
-        fire(new CellDeletedEvent(path));
-        fire(new CellCreatedEvent(path.parent().with(name)));
     }
 
     public Reaction getReaction(Path cell) {
@@ -74,7 +63,6 @@ public class SerialEngine implements Engine {
 
     public void changeReaction(Path cell, Reaction reaction) {
         resolve(cell).setReaction(reaction);
-        fire(new ChangedReactionEvent(cell));
     }
 
     public Reaction getOwnReaction(Path cell) {
