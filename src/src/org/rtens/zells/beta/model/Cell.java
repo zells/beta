@@ -74,7 +74,7 @@ public class Cell implements Observer {
 
     public Cell add(String name, Path stem) {
         Cell child = new Cell(this, name, stem);
-        child.listen(this);
+        child.observe(this);
         children.add(child);
         fire(new CellCreatedEvent(child.getPath()));
         return child;
@@ -154,7 +154,7 @@ public class Cell implements Observer {
         return getPath().toString();
     }
 
-    public void listen(Observer observer) {
+    public void observe(Observer observer) {
         observers.add(observer);
     }
 

@@ -25,7 +25,7 @@ public class SerialEngine implements Engine {
     }
 
     public void observe(Path path, Observer observer) {
-        resolve(path).listen(observer);
+        resolve(path).observe(observer);
     }
 
     public void create(Path parent, String name) {
