@@ -24,6 +24,11 @@ public class InheritedCell extends Cell {
     }
 
     @Override
+    public void setReaction(Reaction reaction) {
+        parent.add(getName(), child.getPath()).setReaction(reaction);
+    }
+
+    @Override
     public Cell add(String name, Path stem) {
         return parent.add(getName(), child.getPath()).add(name, stem);
     }

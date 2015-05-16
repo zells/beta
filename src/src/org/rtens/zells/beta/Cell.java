@@ -8,6 +8,7 @@ public class Cell {
     private String name;
     private Path stem;
     private Set<Cell> children = new HashSet<Cell>();
+    private Reaction reaction;
 
     public Cell(Cell parent, String name, Path stem) {
         this.parent = parent;
@@ -36,6 +37,21 @@ public class Cell {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setReaction(Reaction reaction) {
+        this.reaction = reaction;
+    }
+
+    public Reaction getReaction() {
+        if (reaction == null && !stem.equals(getPath())) {
+            return resolve(stem).getReaction();
+        }
+        return getOwnReaction();
+    }
+
+    public Reaction getOwnReaction() {
+        return reaction;
     }
 
     public Cell add(String name, Path stem) {

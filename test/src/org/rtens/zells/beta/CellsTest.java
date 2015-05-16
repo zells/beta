@@ -32,7 +32,7 @@ public class CellsTest {
     }
 
     protected void thenItShouldThrowAnException(String message) {
-        Assert.assertNotNull(caught);
+        Assert.assertNotNull("No exception was caught", caught);
         Assert.assertEquals(message, caught.getMessage());
     }
 

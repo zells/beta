@@ -43,6 +43,18 @@ public class Engine {
         resolve(path).setName(name);
     }
 
+    public Reaction getReaction(Path cell) {
+        return resolve(cell).getReaction();
+    }
+
+    public void setReaction(Path cell, Reaction reaction) {
+        resolve(cell).setReaction(reaction);
+    }
+
+    public Object getOwnReaction(Path cell) {
+        return resolve(cell).getOwnReaction();
+    }
+
     public List<String> listChildren(Path parent) {
         return sortStrings(resolve(parent).getChildren());
     }
