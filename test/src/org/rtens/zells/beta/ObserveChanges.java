@@ -86,11 +86,7 @@ public class ObserveChanges extends CellsTest {
     }
 
     private void whenIChangeTheReactionOf(String path) {
-        engine.changeReaction(Path.parse(path), new Reaction() {
-            @Override
-            public void execute(Cell receiver, Path message) {
-
-            }
+        engine.changeReaction(Path.parse(path), (receiver, message) -> {
         });
     }
 

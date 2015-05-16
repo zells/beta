@@ -1,6 +1,6 @@
 package org.rtens.zells.beta;
 
-public abstract class Reaction {
+public interface Reaction {
 
-    abstract public void execute(Cell receiver, Path message);
+    void execute(Cell receiver, Path message);
 }

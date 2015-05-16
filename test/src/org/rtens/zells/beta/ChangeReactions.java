@@ -64,7 +64,8 @@ public class ChangeReactions extends CellsTest {
     }
 
     private void whenISetTheReactionOf_To(String path, String reaction) {
-        reactions.put(reaction, new DummyReaction());
+        reactions.put(reaction, (receiver, message) -> {
+        });
         engine.changeReaction(Path.parse(path), reactions.get(reaction));
     }
 
@@ -78,12 +79,5 @@ public class ChangeReactions extends CellsTest {
 
     private void thenTheStemCellOf_ShouldBe(String path, String stem) {
         Assert.assertEquals(Path.parse(stem), engine.getStem(Path.parse(path)));
-    }
-
-    private class DummyReaction extends Reaction {
-        @Override
-        public void execute(Cell receiver, Path message) {
-
-        }
     }
 }

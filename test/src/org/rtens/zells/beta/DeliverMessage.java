@@ -76,7 +76,7 @@ public class DeliverMessage extends CellsTest {
         Assert.assertEquals(Path.parse(context), reactions.get(cell).context.getPath());
     }
 
-    private class SpyReaction extends Reaction {
+    private class SpyReaction implements Reaction {
         public Path received;
         public Cell context;
 
