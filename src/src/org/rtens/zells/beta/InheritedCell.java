@@ -14,6 +14,14 @@ public class InheritedCell extends Cell {
     }
 
     @Override
+    public void receive(Path message) {
+        Reaction reaction = child.getReaction();
+        if (reaction != null) {
+            reaction.execute(this, message);
+        }
+    }
+
+    @Override
     public void setName(String name) {
         throw new RuntimeException("Cannot rename an inherited cell");
     }

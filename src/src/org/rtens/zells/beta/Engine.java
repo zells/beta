@@ -14,6 +14,10 @@ public class Engine {
         root.add("cell", defaultStem);
     }
 
+    public void send(Path cell, Path message) {
+        resolve(cell).receive(message);
+    }
+
     public void create(Path parent, String name) {
         guardName(name);
         guardNotOwnChild(parent, name);

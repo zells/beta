@@ -1,36 +1,89 @@
 package org.rtens.zells.beta;
 
-import org.junit.Ignore;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * When a message is delivered, the receiver's Reaction is executed with the path of the message,
  * relative to the receiver.
  */
-public class DeliverMessage {
+public class DeliverMessage extends CellsTest {
 
     @Test
-    @Ignore
     public void FailIfCellDoesNotExist() {
-//        whenISend_To("bar", "foo");
-//        thenItShouldThrowAnException("[foo] does not exist.");
+        whenITryToSend_To("bar", "foo");
+        thenItShouldThrowAnException("Could not find [foo]");
     }
 
     @Test
-    @Ignore
+    public void WithoutReaction() {
+        givenTheCell("foo");
+        given_HasNoReaction("foo");
+        whenISend_To("bar", "foo");
+    }
+
+    @Test
     public void DeliverMessageToCell() {
-//        givenTheCell("foo");
-//        whenISend_To("bar", "foo");
-//        thenTheReactionOf_ShouldBeExecutedWith("foo", "bar");
+        givenTheCell("foo");
+        whenISend_To("bar", "foo");
+        thenTheReactionOf_ShouldBeExecutedWith("foo", "bar");
     }
 
     @Test
-    @Ignore
     public void DeliverMessageToInheritedCell() {
-//        givenTheCell("foo/one");
-//        givenTheCell_WithTheStem("bar", "/foo");
-//        whenISend_To("message", "bar/one");
-//        thenTheReactionOf_ShouldBeExecutedInTheContextOf("foo/one", "bar/one");
+        givenTheCell("foo.one");
+        givenTheCell_WithTheStem("bar", "°.foo");
+
+        whenISend_To("message", "bar.one");
+
+        thenTheReactionOf_ShouldBeExecutedWith("foo.one", "message");
+        thenTheReactionOf_ShouldBeExecutedInTheContextOf("foo.one", "°.bar.one");
     }
 
+    private Map<String, SpyReaction> reactions = new HashMap<>();
+
+    private void whenITryToSend_To(String message, String cell) {
+        try {
+            whenISend_To(message, cell);
+        } catch (Exception e) {
+            caught = e;
+        }
+    }
+
+    @Override
+    protected void givenTheCell(String path) {
+        super.givenTheCell(path);
+        reactions.put(path, new SpyReaction());
+        engine.setReaction(Path.parse(path), reactions.get(path));
+    }
+
+    private void given_HasNoReaction(String path) {
+        engine.setReaction(Path.parse(path), null);
+    }
+
+    private void whenISend_To(String message, String cell) {
+        engine.send(Path.parse(cell), Path.parse(message));
+    }
+
+    private void thenTheReactionOf_ShouldBeExecutedWith(String cell, String message) {
+        Assert.assertEquals(Path.parse(message), reactions.get(cell).received);
+    }
+
+    private void thenTheReactionOf_ShouldBeExecutedInTheContextOf(String cell, String context) {
+        Assert.assertEquals(Path.parse(context), reactions.get(cell).context.getPath());
+    }
+
+    private class SpyReaction extends Reaction {
+        public Path received;
+        public Cell context;
+
+        @Override
+        public void execute(Cell receiver, Path message) {
+            context = receiver;
+            received = message;
+        }
+    }
 }

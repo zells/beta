@@ -23,6 +23,13 @@ public class Cell {
         return new Path(name);
     }
 
+    public void receive(Path message) {
+        Reaction reaction = getReaction();
+        if (reaction != null) {
+            reaction.execute(this, message);
+        }
+    }
+
     public Path getStem() {
         return stem;
     }
