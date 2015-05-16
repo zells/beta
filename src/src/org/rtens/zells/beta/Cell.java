@@ -38,10 +38,6 @@ public class Cell {
         this.name = name;
     }
 
-    public Cell getParent() {
-        return parent;
-    }
-
     public void add(String name, Path stem) {
         children.add(new Cell(this, name, stem));
     }

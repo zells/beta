@@ -44,7 +44,6 @@ public class CreateCell extends CellsTest {
     }
 
     @Test
-    @Ignore
     public void _AdoptInheritedCell() {
         givenTheCell("foo.one");
         givenACell_WithTheStem("bar", "°.foo");
