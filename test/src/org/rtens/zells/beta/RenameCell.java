@@ -1,6 +1,5 @@
 package org.rtens.zells.beta;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -47,20 +46,19 @@ public class RenameCell extends CellsTest {
     }
 
     @Test
-    @Ignore
     public void _RenameAdoptedCell() {
-//        givenTheCell("foo.one");
-//        givenTheCell_WithTheStem("bar", "foo");
-//        givenTheCell("bar.one");
-//
-//        whenIRename_Of_To("one", "bar", "two");
-//
-//        then_ShouldHave_Children("bar", 2);
-//        then_ShouldBeAChildOf("one", "bar");
-//        then_ShouldBeAChildOf("two", "bar");
-//
-//        then_ShouldHave_Children("foo", 1);
-//        then_ShouldBeAChildOf("one", "foo");
+        givenTheCell("foo.one");
+        givenTheCell_WithTheStem("bar", "°.foo");
+        givenTheCell("bar.one");
+
+        whenIRename_Of_To("one", "bar", "two");
+
+        then_ShouldHave_Children("bar", 2);
+        then_ShouldBeAChildOf("one", "bar");
+        then_ShouldBeAChildOf("two", "bar");
+
+        then_ShouldHave_Children("foo", 1);
+        then_ShouldBeAChildOf("one", "foo");
     }
 
     private void whenITryToRename_Of_To(String name, String parent, String newName) {
