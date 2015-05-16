@@ -143,11 +143,10 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    @Ignore
     public void _NotExistingStem() {
         givenACell_WithTheStem("foo", "bar");
         whenITryToListTheChildrenOf("foo");
-        thenItShouldThrowAnException("Something");
+        thenItShouldThrowAnException("Could not find [bar]");
     }
 
     private void whenITryToListTheChildrenOf(String path) {
