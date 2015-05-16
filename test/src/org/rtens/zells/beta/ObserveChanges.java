@@ -1,82 +1,101 @@
 package org.rtens.zells.beta;
 
-import org.junit.Ignore;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.rtens.zells.beta.events.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * In order to update the UI, changes in cell can be observed.
  */
-public class ObserveChanges {
+public class ObserveChanges extends CellsTest {
 
-    @Test
-    @Ignore
-    public void FailIfCellDoesNotExist() {
-//        whenIObserve("foo");
-//        thenItShouldThrowAnException("[foo] does not exist.");
+    @Before
+    public void before() {
+        super.before();
+        givenIAmObserving();
     }
 
     @Test
-    @Ignore
     public void NotifyAboutNewChild() {
-//        givenTheCell("foo");
-//        givenIAmObserving("foo");
-//        whenICreate_Under("bar", "foo");
-//        thenIShouldBeNotifiedAboutNewCell("foo/bar");
+        givenTheCell("foo");
+        whenICreate_In("bar", "foo");
+        thenIShouldBeNotifiedAboutThe_Cell(CellCreatedEvent.class, "foo.bar");
     }
 
     @Test
-    @Ignore
     public void NotifyAboutNewGrandChild() {
-//        givenTheCell("foo/bar");
-//        givenIAmObserving("foo");
-//        whenICreate_Under("baz", "foo/bar");
-//        thenIShouldNeNotifiedAboutThe_Cell("created", "foo/bar/baz");
+        givenTheCell("foo.bar");
+        whenICreate_In("baz", "foo.bar");
+        thenIShouldBeNotifiedAboutThe_Cell(CellCreatedEvent.class, "foo.bar.baz");
     }
 
     @Test
-    @Ignore
     public void NotifyAboutDeletedCell() {
-//        givenTheCell("foo/bar/baz");
-//        givenIAmObserving("foo");
-//        whenIDelete("foo/bar/baz");
-//        thenIShouldBeNotifiedAboutThe_Cell("deleted", "foo/bar/baz");
+        givenTheCell("foo.bar.baz");
+        whenIDelete("foo.bar.baz");
+        thenIShouldBeNotifiedAboutThe_Cell(CellDeletedEvent.class, "foo.bar.baz");
     }
 
     @Test
-    @Ignore
     public void NotifyAboutChangedStem() {
-//        givenTheCell("foo/bar");
-//        givenIAmObserving("foo");
-//        whenIChangeTheStemOf_To("foo/bar", "new/stem");
-//        thenIShouldBeNotifiedAboutThe_Cell("changedStem", "foo/bar");
+        givenTheCell("foo.bar");
+        whenIChangeTheStemOf("foo.bar");
+        thenIShouldBeNotifiedAboutThe_Cell(ChangedStemEvent.class, "foo.bar");
     }
 
     @Test
-    @Ignore
     public void NotifyAboutChangedReaction() {
-//        givenTheCell("foo/bar");
-//        givenIAmObserving("foo");
-//        whenIChangeTheReactionOf("foo/bar");
-//        thenIShouldBeNotifiedAboutThe_Cell("changedReaction", "foo/bar");
+        givenTheCell("foo.bar");
+        whenIChangeTheReactionOf("foo.bar");
+        thenIShouldBeNotifiedAboutThe_Cell(ChangedReactionEvent.class, "foo.bar");
     }
 
     @Test
-    @Ignore
     public void NotifyAboutChangedName() {
-//        givenTheCell("foo/bar");
-//        givenIAmObserving("foo");
-//        whenIChangeTheNameOf_To("foo/bar", "baz");
-//        thenIShouldBeNotifiedAboutThe_Cell("deleted", "foo/bar");
-//        thenIShouldBeNotifiedAboutThe_Cell("created", "foo/baz");
+        givenTheCell("foo.bar");
+        whenIChangeTheNameOf_To("foo.bar", "baz");
+        thenIShouldBeNotifiedAboutThe_Cell(CellDeletedEvent.class, "foo.bar");
+        thenIShouldBeNotifiedAboutThe_Cell(CellCreatedEvent.class, "foo.baz");
+        thenIShouldBeNotifiedAboutThe_Cell(CellRenamedEvent.class, "foo.bar");
     }
 
-    @Test
-    @Ignore
-    public void StopObservation() {
-//        givenTheCell("foo");
-//        givenIAmObserving("foo");
-//        whenIStopObserving("foo");
-//        whenICreate_Under("bar", "foo");
-//        thenIShouldGetNotification();
+    private Map<Class, CellEvent> events = new HashMap<>();
+
+    private void givenIAmObserving() {
+        engine.observe(event -> events.put(event.getClass(), event));
+    }
+
+    private void whenICreate_In(String child, String parent) {
+        engine.create(Path.parse(parent), child);
+    }
+
+    private void whenIDelete(String path) {
+        engine.delete(Path.parse(path).parent(), Path.parse(path).last());
+    }
+
+    private void whenIChangeTheStemOf(String path) {
+        engine.changeStem(Path.parse(path), new Path("foo"));
+    }
+
+    private void whenIChangeTheNameOf_To(String path, String name) {
+        engine.rename(Path.parse(path), name);
+    }
+
+    private void whenIChangeTheReactionOf(String path) {
+        engine.changeReaction(Path.parse(path), new Reaction() {
+            @Override
+            public void execute(Cell receiver, Path message) {
+
+            }
+        });
+    }
+
+    private void thenIShouldBeNotifiedAboutThe_Cell(Class event, String path) {
+        Assert.assertTrue(events.containsKey(event));
+        Assert.assertTrue(events.get(event).getPath().equals(Path.parse(path)));
     }
 }

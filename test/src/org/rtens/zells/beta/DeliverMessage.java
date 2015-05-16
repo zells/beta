@@ -57,11 +57,11 @@ public class DeliverMessage extends CellsTest {
     protected void givenTheCell(String path) {
         super.givenTheCell(path);
         reactions.put(path, new SpyReaction());
-        engine.setReaction(Path.parse(path), reactions.get(path));
+        engine.changeReaction(Path.parse(path), reactions.get(path));
     }
 
     private void given_HasNoReaction(String path) {
-        engine.setReaction(Path.parse(path), null);
+        engine.changeReaction(Path.parse(path), null);
     }
 
     private void whenISend_To(String message, String cell) {

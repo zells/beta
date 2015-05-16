@@ -34,6 +34,10 @@ public class Path {
         return new Path(parts.subList(0, parts.size() - 1));
     }
 
+    public String last() {
+        return parts.get(parts.size() - 1);
+    }
+
     public static Path parse(String path) {
         return new Path(Arrays.asList(path.split("\\.")));
     }

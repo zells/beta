@@ -1,13 +1,13 @@
 package org.rtens.zells.beta;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import org.rtens.zells.beta.events.*;
+
+import java.util.*;
 
 public class Engine {
     private final Cell root;
     private final Path defaultStem = new Path("°", "cell");
+    private Set<Observer> observers = new HashSet<Observer>();
 
     public Engine() {
         root = new Cell(null, "°", defaultStem);
@@ -18,15 +18,27 @@ public class Engine {
         resolve(cell).receive(message);
     }
 
+    public void observe(Observer observer) {
+        observers.add(observer);
+    }
+
+    private void fire(CellEvent event) {
+        for (Observer o : observers) {
+            o.on(event);
+        }
+    }
+
     public void create(Path parent, String name) {
         guardName(name);
         guardNotOwnChild(parent, name);
 
         resolve(parent).add(name, defaultStem);
+        fire(new CellCreatedEvent(parent.with(name)));
     }
 
-    public void setStem(Path cell, Path stem) {
+    public void changeStem(Path cell, Path stem) {
         resolve(cell).setStem(stem);
+        fire(new ChangedStemEvent(cell));
     }
 
     public Path getStem(Path cell) {
@@ -38,6 +50,7 @@ public class Engine {
         guardOwnChild(parent, child);
 
         resolve(parent).remove(child);
+        fire(new CellDeletedEvent(parent.with(child)));
     }
 
     public void rename(Path path, String name) {
@@ -45,14 +58,18 @@ public class Engine {
         guardNotExisting(path.parent().with(name));
 
         resolve(path).setName(name);
+        fire(new CellRenamedEvent(path));
+        fire(new CellDeletedEvent(path));
+        fire(new CellCreatedEvent(path.parent().with(name)));
     }
 
     public Reaction getReaction(Path cell) {
         return resolve(cell).getReaction();
     }
 
-    public void setReaction(Path cell, Reaction reaction) {
+    public void changeReaction(Path cell, Reaction reaction) {
         resolve(cell).setReaction(reaction);
+        fire(new ChangedReactionEvent(cell));
     }
 
     public Object getOwnReaction(Path cell) {

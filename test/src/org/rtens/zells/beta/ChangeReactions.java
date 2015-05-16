@@ -65,7 +65,7 @@ public class ChangeReactions extends CellsTest {
 
     private void whenISetTheReactionOf_To(String path, String reaction) {
         reactions.put(reaction, new DummyReaction());
-        engine.setReaction(Path.parse(path), reactions.get(reaction));
+        engine.changeReaction(Path.parse(path), reactions.get(reaction));
     }
 
     private void then_ShouldHaveNoOwnReaction(String path) {

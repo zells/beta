@@ -28,7 +28,7 @@ public class CellsTest {
 
     protected void givenTheCell_WithTheStem(String path, String stem) {
         givenTheCell(path);
-        engine.setStem(Path.parse(path), Path.parse(stem));
+        engine.changeStem(Path.parse(path), Path.parse(stem));
     }
 
     protected void thenItShouldThrowAnException(String message) {

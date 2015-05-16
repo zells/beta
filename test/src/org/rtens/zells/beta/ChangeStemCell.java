@@ -27,7 +27,7 @@ public class ChangeStemCell extends CellsTest {
     }
 
     private void whenISetTheStemOf_To(String path, String stem) {
-        engine.setStem(Path.parse(path), Path.parse(stem));
+        engine.changeStem(Path.parse(path), Path.parse(stem));
     }
 
     private void thenTheStemCellOf_ShouldBe(String path, String stem) {
