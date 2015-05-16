@@ -11,7 +11,7 @@ public class DeleteCell extends CellsTest {
     @Test
     public void _FailIfCellDoesNotExist() {
         whenITryToDelete_Of("foo", "°");
-        thenItShouldThrowAnException("Child [foo] does not exist.");
+        thenItShouldThrowAnException("[°] does not have the child [foo].");
     }
 
     @Test
@@ -26,7 +26,7 @@ public class DeleteCell extends CellsTest {
         givenACell("foo.one");
         givenACell_WithTheStem("bar", "foo");
         whenITryToDelete_Of("one", "bar");
-        thenItShouldThrowAnException("Child [one] does not exist.");
+        thenItShouldThrowAnException("[°.bar] does not have the child [one].");
     }
 
     private void whenITryToDelete_Of(String child, String parent) {

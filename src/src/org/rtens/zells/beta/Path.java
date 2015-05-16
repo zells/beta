@@ -31,11 +31,7 @@ public class Path {
     }
 
     public static Path parse(String path) {
-        List<String> parts = Arrays.asList(path.split("\\."));
-        if (parts.get(0).equals("°")) {
-            return new AbsolutePath(parts.subList(1, parts.size()));
-        }
-        return new Path(parts);
+        return new Path(Arrays.asList(path.split("\\.")));
     }
 
     @Override

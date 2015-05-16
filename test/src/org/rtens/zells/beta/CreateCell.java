@@ -12,14 +12,14 @@ public class CreateCell extends CellsTest {
     @Test
     public void _FailIfParentDoesNotExist() {
         whenITryToCreate_Under("bar", "foo");
-        thenItShouldThrowAnException("Child [foo] does not exist.");
+        thenItShouldThrowAnException("Could not find [foo] in [°].");
     }
 
     @Test
     public void _FailIfNameIsEmpty() {
         givenACell("foo");
         whenITryToCreate_Under("", "foo");
-        thenItShouldThrowAnException("Cannot create cell with empty name.");
+        thenItShouldThrowAnException("Cannot give a cell an empty name.");
     }
 
     @Test
@@ -33,7 +33,7 @@ public class CreateCell extends CellsTest {
     public void _FailIfChildAlreadyExists() {
         givenACell("foo.bar");
         whenITryToCreate_Under("bar", "foo");
-        thenItShouldThrowAnException("Child [bar] already exists.");
+        thenItShouldThrowAnException("[°.foo] already has a child [bar].");
     }
 
     @Test
@@ -46,23 +46,26 @@ public class CreateCell extends CellsTest {
     @Test
     @Ignore
     public void _AdoptInheritedCell() {
-//        givenACell("foo");
-//        givenACell_WithTheStem("foo.one", "inherited");
-//        givenACell_WithTheStem("bar", "°.foo");
-//        whenICreate_In("two", "bar.one");
-//        thenThereShouldBeACell("bar.one.two");
-//        thenTheStemCellOf_ShouldBe("bar.one", "°.foo.one");
-//        then_ShouldNotExist("foo.one.two");
+        givenACell("foo.one");
+        givenACell_WithTheStem("bar", "°.foo");
+
+        whenICreate_In("two", "bar.one");
+
+        thenThereShouldBeACell("bar.one.two");
+        thenTheStemCellOf_ShouldBe("bar.one", "°.foo.one");
+        then_ShouldNotExist("foo.one.two");
     }
 
     @Test
     @Ignore
     public void _AdoptInheritedGrandChild() {
-//        givenACell("foo.one.two");
-//        givenACell_WithTheStem("bar", "°.foo");
-//        whenICreate_In("three", "bar.one.two");
-//        thenTheStemCellOf_ShouldBe("bar.one.two", "°.foo.one.two");
-//        thenTheStemCellOf_ShouldBe("bar.one", "°.foo.one");
+        givenACell("foo.one.two");
+        givenACell_WithTheStem("bar", "°.foo");
+
+        whenICreate_In("three", "bar.one.two");
+
+        thenTheStemCellOf_ShouldBe("bar.one.two", "°.foo.one.two");
+        thenTheStemCellOf_ShouldBe("bar.one", "°.foo.one");
     }
 
     private void whenITryToCreate_Under(String child, String parent) {
@@ -83,5 +86,14 @@ public class CreateCell extends CellsTest {
 
     private void thenTheStemCellOf_ShouldBe(String path, String stem) {
         Assert.assertEquals(Path.parse(stem), engine.getStem(Path.parse(path)));
+    }
+
+    private void then_ShouldNotExist(String path) {
+        try {
+            engine.listChildren(Path.parse(path));
+        } catch (Exception e) {
+            caught = e;
+        }
+        Assert.assertNotNull(caught);
     }
 }

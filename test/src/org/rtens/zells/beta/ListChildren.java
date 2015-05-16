@@ -76,6 +76,12 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
+    @Ignore
+    public void _ListOwnChildren() {
+
+    }
+
+    @Test
     public void _InheritInheritedChildren() {
         givenACell("foo.one");
         givenACell_WithTheStem("bar", "°.foo");
