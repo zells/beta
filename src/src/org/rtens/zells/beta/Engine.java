@@ -42,4 +42,9 @@ public class Engine {
         }
         return cell;
     }
+
+    public void delete(Path parent, String child) {
+        resolve(parent.with(child));
+        resolve(parent).remove(child);
+    }
 }

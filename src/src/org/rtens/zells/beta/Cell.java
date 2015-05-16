@@ -22,7 +22,7 @@ public class Cell {
         if (name.equals("°")) {
             return getRoot();
         }
-        for (Cell child : children) {
+        for (Cell child : getChildren()) {
             if (child.name.equals(name)) {
                 return child;
             }
@@ -31,7 +31,7 @@ public class Cell {
     }
 
     public Cell addChild(String name, Cell stem) {
-        if (hasChild(name)) {
+        if (hasOwnChild(name)) {
             throw new RuntimeException("[" + getPath() + "] already has a child named [" + name + "].");
         }
 
@@ -40,13 +40,13 @@ public class Cell {
         return child;
     }
 
-    private boolean hasChild(String name) {
-        try {
-            getChild(name);
-            return true;
-        } catch (Exception ignored) {
-            return false;
+    private boolean hasOwnChild(String name) {
+        for (Cell child : children) {
+            if (child.name.equals(name)) {
+                return true;
+            }
         }
+        return false;
     }
 
     public List<Cell> getChildren() {
@@ -90,5 +90,12 @@ public class Cell {
 
     public String getName() {
         return name;
+    }
+
+    public void remove(String name) {
+        if (!hasOwnChild(name)) {
+            throw new RuntimeException("Cannot delete an inherited cell.");
+        }
+        children.remove(getChild(name));
     }
 }

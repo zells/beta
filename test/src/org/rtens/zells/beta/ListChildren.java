@@ -86,6 +86,17 @@ public class ListChildren extends CellsTest {
         then_ShouldBeAChild("one");
     }
 
+    @Test
+    public void _InheritChildrenOfInheritedChildren() {
+        givenACell("foo.one");
+        givenACell_WithTheStem("bar.two", "foo");
+        givenACell_WithTheStem("baz", "bar");
+
+        whenIListTheChildrenOf("baz.two");
+        thenIShouldGet_Cells(1);
+        then_ShouldBeAChild("one");
+    }
+
     private List<String> children = new ArrayList<>();
 
     private void whenIListTheChildrenOf(String path) {
