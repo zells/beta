@@ -29,7 +29,7 @@ public class ChangeResponse {
     public void _AdoptInheritedCell() {
 //        givenTheCell("foo/one");
 //        givenTheResponseOf_Is("foo/one", "Old response");
-//        givenACell_WithTheStem("bar", "/foo");
+//        givenTheCell_WithTheStem("bar", "/foo");
 //        whenISetTheResponseOf_To("bar/one", "New response");
 //        thenTheResponseOf_ShouldBe("bar/one", "New response");
 //        thenTheStemCellOf_ShouldBe("bar/one", "/foo/one");

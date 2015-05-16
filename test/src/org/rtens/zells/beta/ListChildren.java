@@ -1,7 +1,6 @@
 package org.rtens.zells.beta;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class ListChildren extends CellsTest {
     public void _ListInheritedChildren() {
         givenTheCell("foo.one");
         givenTheCell("foo.two");
-        givenACell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("bar", "°.foo");
         whenIListTheChildrenOf("bar");
         thenIShouldGet_Cells(2);
         then_ShouldBeAChild("one");
@@ -57,10 +56,10 @@ public class ListChildren extends CellsTest {
         givenTheCell("of.bar");
 
         givenTheCell("foo.one");
-        givenACell_WithTheStem("foo.two", "°.of.foo");
+        givenTheCell_WithTheStem("foo.two", "°.of.foo");
 
-        givenACell_WithTheStem("bar", "°.foo");
-        givenACell_WithTheStem("bar.two", "°.of.bar");
+        givenTheCell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("bar.two", "°.of.bar");
 
         givenTheCell("bar.three");
 
@@ -76,16 +75,25 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    @Ignore
     public void _ListOwnChildren() {
+        givenTheCell("foo.one");
+        givenTheCell("foo.two");
 
+        givenTheCell_WithTheStem("bar", "°.foo");
+        givenTheCell("bar.one");
+        givenTheCell("bar.three");
+
+        whenIListTheOwnChildrenOf("bar");
+        thenIShouldGet_Cells(2);
+        then_ShouldBeAChild("one");
+        then_ShouldBeAChild("three");
     }
 
     @Test
     public void _InheritInheritedChildren() {
         givenTheCell("foo.one");
-        givenACell_WithTheStem("bar", "°.foo");
-        givenACell_WithTheStem("baz", "°.bar");
+        givenTheCell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("baz", "°.bar");
 
         whenIListTheChildrenOf("baz");
 
@@ -96,8 +104,8 @@ public class ListChildren extends CellsTest {
     @Test
     public void _OverwriteStem() {
         givenTheCell("foo.one");
-        givenACell_WithTheStem("bar", "°.foo");
-        givenACell_WithTheStem("baz", "°.bar.one");
+        givenTheCell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("baz", "°.bar.one");
 
         whenIListTheChildrenOf("baz");
         thenIShouldGet_Cells(0);
@@ -111,9 +119,9 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _InheritChildrenOfInheritedChildren() {
-        givenACell_WithTheStem("meh", "°.baz");
-        givenACell_WithTheStem("baz.one", "°.bar");
-        givenACell_WithTheStem("bar.two", "°.foo");
+        givenTheCell_WithTheStem("meh", "°.baz");
+        givenTheCell_WithTheStem("baz.one", "°.bar");
+        givenTheCell_WithTheStem("bar.two", "°.foo");
         givenTheCell("foo.three");
 
         whenIListTheChildrenOf("meh.one.two");
@@ -123,7 +131,7 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _StemPathIsRelative() {
-        givenACell_WithTheStem("foo.bar", "baz");
+        givenTheCell_WithTheStem("foo.bar", "baz");
         givenTheCell("foo.bar.baz.one");
         whenIListTheChildrenOf("foo.bar");
 
@@ -134,9 +142,9 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _CatchInheritanceLoop() {
-        givenACell_WithTheStem("foo", "°.baz");
-        givenACell_WithTheStem("bar", "°.foo");
-        givenACell_WithTheStem("baz", "°.bar");
+        givenTheCell_WithTheStem("foo", "°.baz");
+        givenTheCell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("baz", "°.bar");
         whenIListTheChildrenOf("foo");
         thenIShouldGet_Cells(0);
 
@@ -144,7 +152,7 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _NotExistingStem() {
-        givenACell_WithTheStem("foo", "bar");
+        givenTheCell_WithTheStem("foo", "bar");
         whenITryToListTheChildrenOf("foo");
         thenItShouldThrowAnException("Could not find [bar]");
     }
@@ -161,6 +169,10 @@ public class ListChildren extends CellsTest {
 
     private void whenIListTheChildrenOf(String path) {
         children = engine.listChildren(Path.parse(path));
+    }
+
+    private void whenIListTheOwnChildrenOf(String path) {
+        children = engine.listOwnChildren(Path.parse(path));
     }
 
     private void thenIShouldGet_Cells(int count) {

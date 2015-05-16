@@ -1,6 +1,9 @@
 package org.rtens.zells.beta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class Engine {
     private final Cell root;
@@ -40,8 +43,12 @@ public class Engine {
         resolve(path).setName(name);
     }
 
-    public List<String> listChildren(Path path) {
-        return sortStrings(resolve(path).getChildren());
+    public List<String> listChildren(Path parent) {
+        return sortStrings(resolve(parent).getChildren());
+    }
+
+    public List<String> listOwnChildren(Path parent) {
+        return sortStrings(resolve(parent).getOwnChildren());
     }
 
     private List<String> sortStrings(Set<String> children) {

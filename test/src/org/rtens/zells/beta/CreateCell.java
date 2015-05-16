@@ -45,7 +45,7 @@ public class CreateCell extends CellsTest {
     @Test
     public void _AdoptInheritedCell() {
         givenTheCell("foo.one");
-        givenACell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("bar", "°.foo");
 
         whenICreate_In("two", "bar.one");
 
@@ -57,7 +57,7 @@ public class CreateCell extends CellsTest {
     @Test
     public void _AdoptInheritedGrandChild() {
         givenTheCell("foo.one.two");
-        givenACell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("bar", "°.foo");
 
         whenICreate_In("three", "bar.one.two");
 

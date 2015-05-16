@@ -17,8 +17,8 @@ public class ChangeStemCell extends CellsTest {
 
     @Test
     public void _AdoptInheritedChild() {
-        givenACell_WithTheStem("foo.one", "inherited");
-        givenACell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("foo.one", "inherited");
+        givenTheCell_WithTheStem("bar", "°.foo");
 
         whenISetTheStemOf_To("bar.one", "adopted");
 

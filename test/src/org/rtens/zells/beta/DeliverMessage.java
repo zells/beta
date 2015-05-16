@@ -28,7 +28,7 @@ public class DeliverMessage {
     @Ignore
     public void _DeliverMessageToInheritedCell() {
 //        givenTheCell("foo/one");
-//        givenACell_WithTheStem("bar", "/foo");
+//        givenTheCell_WithTheStem("bar", "/foo");
 //        whenISend_To("message", "bar/one");
 //        thenTheResponseOf_ShouldBeExecutedInTheContextOf("foo/one", "bar/one");
     }

@@ -41,7 +41,7 @@ public class RenameCell extends CellsTest {
     @Test
     public void _FailIfCellIsInherited() {
         givenTheCell("foo.one");
-        givenACell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("bar", "°.foo");
         whenITryToRename_Of_To("one", "bar", "two");
         thenItShouldThrowAnException("Cannot rename an inherited cell");
     }
@@ -50,7 +50,7 @@ public class RenameCell extends CellsTest {
     @Ignore
     public void _RenameAdoptedCell() {
 //        givenTheCell("foo.one");
-//        givenACell_WithTheStem("bar", "foo");
+//        givenTheCell_WithTheStem("bar", "foo");
 //        givenTheCell("bar.one");
 //
 //        whenIRename_Of_To("one", "bar", "two");

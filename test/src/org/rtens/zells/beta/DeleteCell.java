@@ -23,7 +23,7 @@ public class DeleteCell extends CellsTest {
     @Test
     public void _FailIfCellIsInherited() {
         givenTheCell("foo.one");
-        givenACell_WithTheStem("bar", "°.foo");
+        givenTheCell_WithTheStem("bar", "°.foo");
         whenITryToDelete_Of("one", "bar");
         thenItShouldThrowAnException("[bar.one] is inherited");
     }

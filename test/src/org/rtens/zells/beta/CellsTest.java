@@ -26,7 +26,7 @@ public class CellsTest {
         }
     }
 
-    protected void givenACell_WithTheStem(String path, String stem) {
+    protected void givenTheCell_WithTheStem(String path, String stem) {
         givenTheCell(path);
         engine.setStem(Path.parse(path), Path.parse(stem));
     }
