@@ -1,5 +1,7 @@
 package org.rtens.zells.beta;
 
+import java.util.Set;
+
 public class InheritedCell extends Cell {
 
     private Cell parent;
@@ -22,8 +24,12 @@ public class InheritedCell extends Cell {
     }
 
     @Override
-    public void add(String name, Path stem) {
-        parent.add(getName(), child.getPath());
-        parent.resolve(new Path(getName())).add(name, stem);
+    public Cell add(String name, Path stem) {
+        return parent.add(getName(), child.getPath()).add(name, stem);
+    }
+
+    @Override
+    protected Cell findChild(String name, Set<Cell> visited) {
+        return new InheritedCell(this, child.findChild(name, visited));
     }
 }

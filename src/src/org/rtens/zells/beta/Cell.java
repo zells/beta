@@ -38,8 +38,10 @@ public class Cell {
         this.name = name;
     }
 
-    public void add(String name, Path stem) {
-        children.add(new Cell(this, name, stem));
+    public Cell add(String name, Path stem) {
+        Cell child = new Cell(this, name, stem);
+        children.add(child);
+        return child;
     }
 
     public void remove(String name) {
@@ -71,7 +73,7 @@ public class Cell {
         return names;
     }
 
-    private Cell findChild(String name, Set<Cell> visited) {
+    protected Cell findChild(String name, Set<Cell> visited) {
         for (Cell child : children) {
             if (child.name.equals(name)) {
                 return child;

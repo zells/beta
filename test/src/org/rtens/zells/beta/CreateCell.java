@@ -1,7 +1,6 @@
 package org.rtens.zells.beta;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -56,7 +55,6 @@ public class CreateCell extends CellsTest {
     }
 
     @Test
-    @Ignore
     public void _AdoptInheritedGrandChild() {
         givenTheCell("foo.one.two");
         givenACell_WithTheStem("bar", "°.foo");
