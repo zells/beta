@@ -26,4 +26,21 @@ public class AdoptCells {
 //        thenTheStemCellOf_ShouldBe("bar.one.two", "°.foo.one.two");
 //        thenTheStemCellOf_ShouldBe("bar.one", "°.foo.one");
     }
+
+    @Test
+    @Ignore
+    public void _RenameAdoptedCell() {
+//        givenACell("foo.one");
+//        givenACell_WithTheStem("bar", "foo");
+//        givenACell("bar.one");
+//
+//        whenIRename_Of_To("one", "bar", "two");
+//
+//        then_ShouldHave_Children("bar", 2);
+//        then_ShouldBeAChildOf("one", "bar");
+//        then_ShouldBeAChildOf("two", "bar");
+//
+//        then_ShouldHave_Children("foo", 1);
+//        then_ShouldBeAChildOf("one", "foo");
+    }
 }

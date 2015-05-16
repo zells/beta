@@ -11,7 +11,7 @@ public class DeleteCell extends CellsTest {
     @Test
     public void _FailIfCellDoesNotExist() {
         whenITryToDelete_Of("foo", "°");
-        thenItShouldThrowAnException("[°] has no child named [foo].");
+        thenItShouldThrowAnException("Child [foo] does not exist.");
     }
 
     @Test
@@ -26,10 +26,8 @@ public class DeleteCell extends CellsTest {
         givenACell("foo.one");
         givenACell_WithTheStem("bar", "foo");
         whenITryToDelete_Of("one", "bar");
-        thenItShouldThrowAnException("Cannot delete an inherited cell.");
+        thenItShouldThrowAnException("Child [one] does not exist.");
     }
-
-    private Exception caught;
 
     private void whenITryToDelete_Of(String child, String parent) {
         try {
@@ -41,14 +39,5 @@ public class DeleteCell extends CellsTest {
 
     private void whenIDelete_Of(String child, String parent) {
         engine.delete(Path.parse(parent), child);
-    }
-
-    private void thenItShouldThrowAnException(String message) {
-        Assert.assertNotNull(caught);
-        Assert.assertEquals(message, caught.getMessage());
-    }
-
-    private void then_ShouldHave_Children(String path, int count) {
-        Assert.assertEquals(count, engine.listChildren(Path.parse(path)).size());
     }
 }

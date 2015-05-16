@@ -1,7 +1,6 @@
 package org.rtens.zells.beta;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -12,7 +11,7 @@ public class CreateCell extends CellsTest {
     @Test
     public void _FailIfParentDoesNotExist() {
         whenITryToCreate_Under("bar", "foo");
-        thenItShouldThrowAnException("[°] has no child named [foo].");
+        thenItShouldThrowAnException("Child [foo] does not exist.");
     }
 
     @Test
@@ -33,7 +32,7 @@ public class CreateCell extends CellsTest {
     public void _FailIfChildAlreadyExists() {
         givenACell("foo.bar");
         whenITryToCreate_Under("bar", "foo");
-        thenItShouldThrowAnException("[°.foo] already has a child named [bar].");
+        thenItShouldThrowAnException("Child [bar] already exists.");
     }
 
     @Test
@@ -42,8 +41,6 @@ public class CreateCell extends CellsTest {
         whenICreate_In("bar", "foo");
         thenTheStemCellOf_ShouldBe("foo.bar", "°.cell");
     }
-
-    private Exception caught;
 
     private void whenITryToCreate_Under(String child, String parent) {
         try {
@@ -55,11 +52,6 @@ public class CreateCell extends CellsTest {
 
     private void whenICreate_In(String child, String parent) {
         engine.create(Path.parse(parent), child);
-    }
-
-    private void thenItShouldThrowAnException(String message) {
-        Assert.assertNotNull(caught);
-        Assert.assertEquals(message, caught.getMessage());
     }
 
     private void thenThereShouldBeACell(String path) {

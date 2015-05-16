@@ -11,6 +11,10 @@ public class Path {
         this.parts = parts;
     }
 
+    public Path(String... parts) {
+        this(Arrays.asList(parts));
+    }
+
     public Path() {
         this(new ArrayList<String>());
     }
@@ -27,7 +31,11 @@ public class Path {
     }
 
     public static Path parse(String path) {
-        return new Path(Arrays.asList(path.split("\\.")));
+        List<String> parts = Arrays.asList(path.split("\\."));
+        if (parts.get(0).equals("°")) {
+            return new AbsolutePath(parts.subList(1, parts.size()));
+        }
+        return new Path(parts);
     }
 
     @Override

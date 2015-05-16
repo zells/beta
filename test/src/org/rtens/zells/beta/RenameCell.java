@@ -1,64 +1,61 @@
 package org.rtens.zells.beta;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Renaming a cell is equivalent with deleting and re-creating it.
  */
-public class RenameCell {
+public class RenameCell extends CellsTest {
 
     @Test
-    @Ignore
     public void _FailIfCellDoesNotExist() {
-//        whenIRename_To("foo", "bar");
-//        thenItShouldThrowAnException("[foo] does not exist.");
+        givenACell("foo");
+        whenITryToRename_Of_To("bar", "foo", "baz");
+        thenItShouldThrowAnException("Child [bar] does not exist.");
     }
 
     @Test
-    @Ignore
     public void _FailIfSiblingWithSameNameExists() {
-//        givenACell("foo/bar");
-//        givenACell("foo/baz");
-//        whenIRename_To("foo/bar", "baz");
-//        thenItShouldThrowAnException("[foo] already has a child named [baz].");
+        givenACell("foo.bar");
+        givenACell("foo.baz");
+        whenITryToRename_Of_To("bar", "foo", "baz");
+        thenItShouldThrowAnException("Child [baz] already exists.");
     }
 
     @Test
-    @Ignore
     public void _FailIfNewNameIsEmpty() {
-//        givenACell("foo");
-//        whenIRename_To("foo", "");
-//        thenItShouldThrowAnException("Cannot give a cell an empty name.");
+        givenACell("foo.bar");
+        whenITryToRename_Of_To("bar", "foo", "");
+        thenItShouldThrowAnException("Cannot give a cell an empty name.");
     }
 
     @Test
-    @Ignore
     public void _RenameExistingCell() {
-//        givenACell("foo/bar");
-//        whenIRename_To("foo/bar", "baz");
-//        then_ShouldNotExist("foo/bar");
-//        thenThereShouldBeACell("foo/baz");
+        givenACell("foo.bar");
+        whenIRename_Of_To("bar", "foo", "baz");
+        then_ShouldHave_Children("foo", 1);
+        then_ShouldBeAChildOf("baz", "foo");
     }
 
     @Test
-    @Ignore
-    public void _RenameAdoptedCell() {
-//        givenACell("foo/one");
-//        givenACell_WithTheStem("bar", "/foo");
-//        givenACell("bar/one");
-//        whenIRename_To("bar/one", "two");
-//        thenThereShouldBeACell("bar/two");
-//        there_ShouldNotExist("bar/one");
-//        thenThereShouldBeACell("foo/one");
-    }
-
-    @Test
-    @Ignore
     public void _FailIfCellIsInherited() {
-//        givenACell("foo/one");
-//        givenACell_WithTheStem("bar", "/foo");
-//        whenIRename_To("bar/one", "two");
-//        thenItShouldThrowAnException("Cannot rename an inherited cell.");
+        givenACell("foo.one");
+        givenACell_WithTheStem("bar", "foo");
+        whenITryToRename_Of_To("one", "bar", "two");
+        thenItShouldThrowAnException("Child [one] does not exist.");
+    }
+
+    private void whenITryToRename_Of_To(String name, String parent, String newName) {
+        try {
+            whenIRename_Of_To(name, parent, newName);
+        } catch (Exception e) {
+            caught = e;
+        }
+    }
+
+    private void whenIRename_Of_To(String name, String parent, String newName) {
+        engine.rename(Path.parse(parent), name, newName);
     }
 }

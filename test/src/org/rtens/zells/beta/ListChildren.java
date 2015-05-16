@@ -1,6 +1,7 @@
 package org.rtens.zells.beta;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class ListChildren extends CellsTest {
     public void _ListInheritedChildren() {
         givenACell("foo.one");
         givenACell("foo.two");
-        givenACell_WithTheStem("bar", "foo");
+        givenACell_WithTheStem("bar", "°.foo");
         whenIListTheChildrenOf("bar");
         thenIShouldGet_Cells(2);
         then_ShouldBeAChild("one");
@@ -56,10 +57,10 @@ public class ListChildren extends CellsTest {
         givenACell("of.bar");
 
         givenACell("foo.one");
-        givenACell_WithTheStem("foo.two", "of.foo");
+        givenACell_WithTheStem("foo.two", "°.of.foo");
 
-        givenACell_WithTheStem("bar", "foo");
-        givenACell_WithTheStem("bar.two", "of.bar");
+        givenACell_WithTheStem("bar", "°.foo");
+        givenACell_WithTheStem("bar.two", "°.of.bar");
 
         givenACell("bar.three");
 
@@ -77,8 +78,8 @@ public class ListChildren extends CellsTest {
     @Test
     public void _InheritInheritedChildren() {
         givenACell("foo.one");
-        givenACell_WithTheStem("bar", "foo");
-        givenACell_WithTheStem("baz", "bar");
+        givenACell_WithTheStem("bar", "°.foo");
+        givenACell_WithTheStem("baz", "°.bar");
 
         whenIListTheChildrenOf("baz");
 
@@ -88,12 +89,24 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void _InheritChildrenOfInheritedChildren() {
-        givenACell("foo.one");
-        givenACell_WithTheStem("bar.two", "foo");
-        givenACell_WithTheStem("baz", "bar");
+        givenACell_WithTheStem("meh", "°.baz");
+        givenACell_WithTheStem("baz.one", "°.bar");
+        givenACell_WithTheStem("bar.two", "°.foo");
+        givenACell("foo.three");
 
-        whenIListTheChildrenOf("baz.two");
+        whenIListTheChildrenOf("meh.one.two");
         thenIShouldGet_Cells(1);
+        then_ShouldBeAChild("three");
+    }
+
+    @Test
+    public void _StemPathIsRelative() {
+        givenACell_WithTheStem("foo.bar", "baz");
+        givenACell("foo.bar.baz.one");
+        whenIListTheChildrenOf("foo.bar");
+
+        thenIShouldGet_Cells(2);
+        then_ShouldBeAChild("baz");
         then_ShouldBeAChild("one");
     }
 
@@ -113,10 +126,6 @@ public class ListChildren extends CellsTest {
 
     private void thenChild_ShouldBe(int index, String name) {
         Assert.assertEquals(name, children.get(index - 1));
-    }
-
-    private void then_ShouldBeInherited(String path) {
-        Assert.fail("Incomplete");
     }
 
     private void thenTheStemCellOf_ShouldBe(String path, String stem) {

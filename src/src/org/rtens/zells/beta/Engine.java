@@ -1,50 +1,76 @@
 package org.rtens.zells.beta;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Engine {
-    private final Cell base;
     private final Cell root;
+    private final Path defaultStem = new AbsolutePath("cell");
 
     public Engine() {
-        root = new Cell(null, "°", null);
-        base = new Cell(root, "cell", null);
+        root = new Cell(new AbsolutePath());
+        root.add("cell", null);
     }
 
     public void create(Path parent, String child) {
         if (child.isEmpty()) {
             throw new RuntimeException("Cannot create cell with empty name.");
         }
-        resolve(parent).addChild(child, base);
+        resolve(parent).add(child, defaultStem);
     }
 
     public void setStem(Path cell, Path stem) {
-        resolve(cell).setStem(resolve(stem));
+        resolve(cell).setStem(stem);
     }
 
     public List<String> listChildren(Path path) {
-        ArrayList<String> names = new ArrayList<String>();
-        for (Cell child : resolve(path).getChildren()) {
-            names.add(child.getName());
+        Cell cell = resolve(path);
+        Set<String> children = getChildren(cell);
+
+        return sortStrings(children);
+    }
+
+    private Set<String> getChildren(Cell cell) {
+        Set<String> children = new HashSet<String>(cell.getChildren());
+        if (cell.getStem() != null) {
+            children.addAll(getChildren(resolve(cell.getStem(), cell)));
         }
-        return names;
+        return children;
+    }
+
+    private List<String> sortStrings(Set<String> children) {
+        ArrayList<String> list = new ArrayList<String>(children);
+        Collections.sort(list);
+        return list;
     }
 
     public Path getStem(Path cell) {
-        return resolve(cell).getStem().getPath();
-    }
-
-    private Cell resolve(Path path) {
-        Cell cell = root;
-        for (String name : path.getParts()) {
-            cell = cell.getChild(name);
-        }
-        return cell;
+        return resolve(cell).getStem();
     }
 
     public void delete(Path parent, String child) {
-        resolve(parent.with(child));
         resolve(parent).remove(child);
+    }
+
+    public void rename(Path parent, String oldName, String newName) {
+        resolve(parent).rename(oldName, newName);
+    }
+
+    private Cell resolve(Path path) {
+        return resolve(path, root);
+    }
+
+    private Cell resolve(Path path, Cell cell) {
+        if (path instanceof AbsolutePath) {
+            cell = root;
+        }
+
+        for (String name : path.getParts()) {
+            try {
+                cell = cell.getChild(name);
+            } catch (Exception e) {
+                cell = resolve(cell.getStem()).getChild(name);
+            }
+        }
+        return cell;
     }
 }
