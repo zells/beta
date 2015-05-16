@@ -10,4 +10,9 @@ public class InheritedCell extends Cell {
     public void setName(String name) {
         throw new RuntimeException("Cannot rename an inherited cell");
     }
+
+    @Override
+    public void setStem(Path stem) {
+        getParent().add(getName(), stem);
+    }
 }

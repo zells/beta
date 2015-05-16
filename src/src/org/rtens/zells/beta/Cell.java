@@ -1,6 +1,7 @@
 package org.rtens.zells.beta;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Cell {
     private Cell parent;
@@ -35,6 +36,10 @@ public class Cell {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Cell getParent() {
+        return parent;
     }
 
     public void add(String name, Path stem) {
