@@ -11,14 +11,14 @@ public class ChangeResponse {
 
     @Test
     @Ignore
-    public void _FailIfCellDoesNotExist() {
+    public void FailIfCellDoesNotExist() {
 //        whenISetTheResponseOf_To("foo", "A new response");
 //        thenItShouldThrowAnException("[foo] does not exist.");
     }
 
     @Test
     @Ignore
-    public void _ChangeResponse() {
+    public void SuccessfullyChangeResponse() {
 //        givenTheCell("foo");
 //        whenISetTheResponseOf_To("foo", "A new response");
 //        thenTheResponseOf_ShouldBe("foo", "A new response");
@@ -26,7 +26,7 @@ public class ChangeResponse {
 
     @Test
     @Ignore
-    public void _AdoptInheritedCell() {
+    public void AdoptInheritedCell() {
 //        givenTheCell("foo/one");
 //        givenTheResponseOf_Is("foo/one", "Old response");
 //        givenTheCell_WithTheStem("bar", "/foo");

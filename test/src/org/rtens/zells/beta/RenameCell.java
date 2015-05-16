@@ -8,14 +8,14 @@ import org.junit.Test;
 public class RenameCell extends CellsTest {
 
     @Test
-    public void _FailIfCellDoesNotExist() {
+    public void FailIfCellDoesNotExist() {
         givenTheCell("foo");
         whenITryToRename_Of_To("bar", "foo", "baz");
         thenItShouldThrowAnException("Could not find [bar]");
     }
 
     @Test
-    public void _FailIfSiblingWithSameNameExists() {
+    public void FailIfSiblingWithSameNameExists() {
         givenTheCell("foo.bar");
         givenTheCell("foo.baz");
         whenITryToRename_Of_To("bar", "foo", "baz");
@@ -23,14 +23,14 @@ public class RenameCell extends CellsTest {
     }
 
     @Test
-    public void _FailIfNewNameIsEmpty() {
+    public void FailIfNewNameIsEmpty() {
         givenTheCell("foo.bar");
         whenITryToRename_Of_To("bar", "foo", "");
         thenItShouldThrowAnException("Cannot give a cell an empty name");
     }
 
     @Test
-    public void _RenameExistingCell() {
+    public void RenameExistingCell() {
         givenTheCell("foo.bar");
         whenIRename_Of_To("bar", "foo", "baz");
         then_ShouldHave_Children("foo", 1);
@@ -38,7 +38,7 @@ public class RenameCell extends CellsTest {
     }
 
     @Test
-    public void _FailIfCellIsInherited() {
+    public void FailIfCellIsInherited() {
         givenTheCell("foo.one");
         givenTheCell_WithTheStem("bar", "°.foo");
         whenITryToRename_Of_To("one", "bar", "two");
@@ -46,7 +46,7 @@ public class RenameCell extends CellsTest {
     }
 
     @Test
-    public void _RenameAdoptedCell() {
+    public void RenameAdoptedCell() {
         givenTheCell("foo.one");
         givenTheCell_WithTheStem("bar", "°.foo");
         givenTheCell("bar.one");

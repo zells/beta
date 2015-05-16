@@ -10,14 +10,14 @@ public class ObserveChanges {
 
     @Test
     @Ignore
-    public void _FailIfCellDoesNotExist() {
+    public void FailIfCellDoesNotExist() {
 //        whenIObserve("foo");
 //        thenItShouldThrowAnException("[foo] does not exist.");
     }
 
     @Test
     @Ignore
-    public void _NotifyAboutNewChild() {
+    public void NotifyAboutNewChild() {
 //        givenTheCell("foo");
 //        givenIAmObserving("foo");
 //        whenICreate_Under("bar", "foo");
@@ -26,7 +26,7 @@ public class ObserveChanges {
 
     @Test
     @Ignore
-    public void _NotifyAboutNewGrandChild() {
+    public void NotifyAboutNewGrandChild() {
 //        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
 //        whenICreate_Under("baz", "foo/bar");
@@ -35,7 +35,7 @@ public class ObserveChanges {
 
     @Test
     @Ignore
-    public void _NotifyAboutDeletedCell() {
+    public void NotifyAboutDeletedCell() {
 //        givenTheCell("foo/bar/baz");
 //        givenIAmObserving("foo");
 //        whenIDelete("foo/bar/baz");
@@ -44,7 +44,7 @@ public class ObserveChanges {
 
     @Test
     @Ignore
-    public void _NotifyAboutChangedStem() {
+    public void NotifyAboutChangedStem() {
 //        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
 //        whenIChangeTheStemOf_To("foo/bar", "new/stem");
@@ -53,7 +53,7 @@ public class ObserveChanges {
 
     @Test
     @Ignore
-    public void _NotifyAboutChangedResponse() {
+    public void NotifyAboutChangedResponse() {
 //        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
 //        whenIChangeTheResponseOf("foo/bar");
@@ -62,7 +62,7 @@ public class ObserveChanges {
 
     @Test
     @Ignore
-    public void _NotifyAboutChangedName() {
+    public void NotifyAboutChangedName() {
 //        givenTheCell("foo/bar");
 //        givenIAmObserving("foo");
 //        whenIChangeTheNameOf_To("foo/bar", "baz");
@@ -72,7 +72,7 @@ public class ObserveChanges {
 
     @Test
     @Ignore
-    public void _StopObservation() {
+    public void StopObservation() {
 //        givenTheCell("foo");
 //        givenIAmObserving("foo");
 //        whenIStopObserving("foo");

@@ -11,14 +11,14 @@ public class DeliverMessage {
 
     @Test
     @Ignore
-    public void _FailIfCellDoesNotExist() {
+    public void FailIfCellDoesNotExist() {
 //        whenISend_To("bar", "foo");
 //        thenItShouldThrowAnException("[foo] does not exist.");
     }
 
     @Test
     @Ignore
-    public void _DeliverMessageToCell() {
+    public void DeliverMessageToCell() {
 //        givenTheCell("foo");
 //        whenISend_To("bar", "foo");
 //        thenTheResponseOf_ShouldBeExecutedWith("foo", "bar");
@@ -26,7 +26,7 @@ public class DeliverMessage {
 
     @Test
     @Ignore
-    public void _DeliverMessageToInheritedCell() {
+    public void DeliverMessageToInheritedCell() {
 //        givenTheCell("foo/one");
 //        givenTheCell_WithTheStem("bar", "/foo");
 //        whenISend_To("message", "bar/one");

@@ -9,14 +9,14 @@ import org.junit.Test;
 public class ChangeStemCell extends CellsTest {
 
     @Test
-    public void _SetNewStemCell() {
+    public void SetNewStemCell() {
         givenTheCell("foo.bar");
         whenISetTheStemOf_To("foo.bar", "some.cell");
         thenTheStemCellOf_ShouldBe("foo.bar", "some.cell");
     }
 
     @Test
-    public void _AdoptInheritedChild() {
+    public void AdoptInheritedChild() {
         givenTheCell_WithTheStem("foo.one", "inherited");
         givenTheCell_WithTheStem("bar", "°.foo");
 

@@ -12,14 +12,14 @@ import java.util.List;
 public class ListChildren extends CellsTest {
 
     @Test
-    public void _NoChildren() {
+    public void NoChildren() {
         givenTheCell("foo");
         whenIListTheChildrenOf("foo");
         thenIShouldGet_Cells(0);
     }
 
     @Test
-    public void _WithChildren() {
+    public void WithChildren() {
         givenTheCell("foo.bar");
         givenTheCell("foo.baz");
         whenIListTheChildrenOf("foo");
@@ -29,7 +29,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _SortByName() {
+    public void SortByName() {
         givenTheCell("foo.baz");
         givenTheCell("foo.meh");
         givenTheCell("foo.bar");
@@ -40,7 +40,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _ListInheritedChildren() {
+    public void ListInheritedChildren() {
         givenTheCell("foo.one");
         givenTheCell("foo.two");
         givenTheCell_WithTheStem("bar", "°.foo");
@@ -51,7 +51,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _MixOwnAndInheritedChildren() {
+    public void MixOwnAndInheritedChildren() {
         givenTheCell("of.foo");
         givenTheCell("of.bar");
 
@@ -75,7 +75,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _ListOwnChildren() {
+    public void ListOwnChildren() {
         givenTheCell("foo.one");
         givenTheCell("foo.two");
 
@@ -90,7 +90,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _InheritInheritedChildren() {
+    public void InheritInheritedChildren() {
         givenTheCell("foo.one");
         givenTheCell_WithTheStem("bar", "°.foo");
         givenTheCell_WithTheStem("baz", "°.bar");
@@ -102,7 +102,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _OverwriteStem() {
+    public void OverwriteStem() {
         givenTheCell("foo.one");
         givenTheCell_WithTheStem("bar", "°.foo");
         givenTheCell_WithTheStem("baz", "°.bar.one");
@@ -118,7 +118,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _InheritChildrenOfInheritedChildren() {
+    public void InheritChildrenOfInheritedChildren() {
         givenTheCell_WithTheStem("meh", "°.baz");
         givenTheCell_WithTheStem("baz.one", "°.bar");
         givenTheCell_WithTheStem("bar.two", "°.foo");
@@ -130,7 +130,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _StemPathIsRelative() {
+    public void StemPathIsRelative() {
         givenTheCell_WithTheStem("foo.bar", "baz");
         givenTheCell("foo.bar.baz.one");
         whenIListTheChildrenOf("foo.bar");
@@ -141,7 +141,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _CatchInheritanceLoop() {
+    public void CatchInheritanceLoop() {
         givenTheCell_WithTheStem("foo", "°.baz");
         givenTheCell_WithTheStem("bar", "°.foo");
         givenTheCell_WithTheStem("baz", "°.bar");
@@ -151,7 +151,7 @@ public class ListChildren extends CellsTest {
     }
 
     @Test
-    public void _NotExistingStem() {
+    public void NotExistingStem() {
         givenTheCell_WithTheStem("foo", "bar");
         whenITryToListTheChildrenOf("foo");
         thenItShouldThrowAnException("Could not find [bar]");

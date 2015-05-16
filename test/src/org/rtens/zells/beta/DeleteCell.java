@@ -8,20 +8,20 @@ import org.junit.Test;
 public class DeleteCell extends CellsTest {
 
     @Test
-    public void _FailIfCellDoesNotExist() {
+    public void FailIfCellDoesNotExist() {
         whenITryToDelete_Of("foo", "°");
         thenItShouldThrowAnException("Could not find [foo]");
     }
 
     @Test
-    public void _DeleteExistingCell() {
+    public void DeleteExistingCell() {
         givenTheCell("foo.bar");
         whenIDelete_Of("bar", "foo");
         then_ShouldHave_Children("foo", 0);
     }
 
     @Test
-    public void _FailIfCellIsInherited() {
+    public void FailIfCellIsInherited() {
         givenTheCell("foo.one");
         givenTheCell_WithTheStem("bar", "°.foo");
         whenITryToDelete_Of("one", "bar");

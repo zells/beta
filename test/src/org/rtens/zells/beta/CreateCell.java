@@ -9,41 +9,41 @@ import org.junit.Test;
 public class CreateCell extends CellsTest {
 
     @Test
-    public void _FailIfParentDoesNotExist() {
+    public void FailIfParentDoesNotExist() {
         whenITryToCreate_In("bar", "foo");
         thenItShouldThrowAnException("Could not find [foo]");
     }
 
     @Test
-    public void _FailIfNameIsEmpty() {
+    public void FailIfNameIsEmpty() {
         givenTheCell("foo");
         whenITryToCreate_In("", "foo");
         thenItShouldThrowAnException("Cannot give a cell an empty name");
     }
 
     @Test
-    public void _CreateNewChild() {
+    public void CreateNewChild() {
         givenTheCell("foo");
         whenICreate_In("bar", "foo");
         thenThereShouldBeACell("foo.bar");
     }
 
     @Test
-    public void _FailIfChildAlreadyExists() {
+    public void FailIfChildAlreadyExists() {
         givenTheCell("foo.bar");
         whenITryToCreate_In("bar", "foo");
         thenItShouldThrowAnException("[foo.bar] already exists");
     }
 
     @Test
-    public void _DefaultStemCell() {
+    public void DefaultStemCell() {
         givenTheCell("foo");
         whenICreate_In("bar", "foo");
         thenTheStemCellOf_ShouldBe("foo.bar", "°.cell");
     }
 
     @Test
-    public void _AdoptInheritedCell() {
+    public void AdoptInheritedCell() {
         givenTheCell("foo.one");
         givenTheCell_WithTheStem("bar", "°.foo");
 
@@ -55,7 +55,7 @@ public class CreateCell extends CellsTest {
     }
 
     @Test
-    public void _AdoptInheritedGrandChild() {
+    public void AdoptInheritedGrandChild() {
         givenTheCell("foo.one.two");
         givenTheCell_WithTheStem("bar", "°.foo");
 
