@@ -17,6 +17,13 @@ public class Cell implements Observer {
     private Set<Observer> observers = new HashSet<Observer>();
     private Map<String, InheritedCell> inheritedChildren = new HashMap<String, InheritedCell>();
 
+    private Observer stemObserver = new Observer() {
+        @Override
+        public void on(CellEvent event) {
+            Cell.this.on(new StrippedEvent(event));
+        }
+    };
+
     public Cell(Cell parent, String name) {
         this.parent = parent;
         this.name = name;
@@ -41,16 +48,20 @@ public class Cell implements Observer {
     }
 
     public void setStem(Path stem) {
-        this.stem = stem;
-        if (stem != null) {
-            resolve(stem).observe(new Observer() {
-                @Override
-                public void on(CellEvent event) {
-                    Cell.this.on(new StrippedEvent(event));
-                }
-            });
-        }
+        doSetStem(stem);
         fire(new CellEvent(CellEvent.Type.ChangedStem, new Path()));
+    }
+
+    protected void doSetStem(Path stem) {
+        if (this.stem != null) {
+            resolve(this.stem).observers.remove(stemObserver);
+        }
+
+        this.stem = stem;
+
+        if (stem != null) {
+            resolve(stem).observe(stemObserver);
+        }
     }
 
     public String getName() {
@@ -74,11 +85,16 @@ public class Cell implements Observer {
     }
 
     public Cell add(String name, Path stem) {
-        final Cell child = new Cell(this, name);
-        child.setStem(stem);
-        child.observe(this);
-        children.add(child);
+        Cell child = doAdd(name, stem);
         fire(new CellEvent(CellEvent.Type.Created, new Path(name)));
+        return child;
+    }
+
+    protected Cell doAdd(String name, Path stem) {
+        final Cell child = new Cell(this, name);
+        child.doSetStem(stem);
+        children.add(child);
+        child.observe(this);
         return child;
     }
 

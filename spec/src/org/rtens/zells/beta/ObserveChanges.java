@@ -3,8 +3,8 @@ package org.rtens.zells.beta;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * In order to update the UI, changes in cell can be observed.
@@ -58,7 +58,20 @@ public class ObserveChanges extends CellsTest {
         givenIAmObserving("foo");
 
         whenICreate_In("bar", "stem");
+        thenIShouldHaveObserved_Events(1);
         thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "foo.bar");
+    }
+
+    @Test
+    public void StopObservingOldStem() {
+        givenTheCell("stem");
+        givenTheCell("other");
+        givenTheCell_WithTheStem("foo", "°.stem");
+        givenTheCell_WithTheStem("foo", "°.other");
+        givenIAmObserving("foo");
+
+        whenICreate_In("bar", "stem");
+        thenIShouldHaveObserved_Events(0);
     }
 
     @Test
@@ -70,18 +83,47 @@ public class ObserveChanges extends CellsTest {
         whenICreate_In("a", "stem.one");
 
         givenIAmObserving("foo");
+
         whenICreate_In("b", "stem.one");
+        thenIShouldHaveObserved_Events(1);
         thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "foo.b");
 
-        givenIAmObserving("foo");
         whenICreate_In("c", "top.one");
+        thenIShouldHaveObserved_Events(2);
         thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "foo.c");
     }
 
-    private Map<CellEvent.Type, CellEvent> events = new HashMap<>();
+    @Test
+    public void AdoptionsMultiplyEvents() {
+        givenTheCell("two.a");
+        givenTheCell_WithTheStem("one", "°.two");
+
+        whenICreate_In("b", "one.a");
+
+        givenIAmObservingTheRoot();
+        whenICreate_In("c", "two.a");
+
+        thenIShouldHaveObserved_Events(3);
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "°.two.a.c");
+        thenIShouldBeNotified_TimeAbout_For(2, CellEvent.Type.Created, "°.one.a.c");
+    }
+
+    @Test
+    public void DoNotNotifyAboutAdoptions() {
+        givenTheCell("stem.one");
+        givenTheCell_WithTheStem("foo", "°.stem");
+
+        givenIAmObservingTheRoot();
+        whenICreate_In("a", "foo.one");
+
+        thenIShouldHaveObserved_Events(1);
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "°.foo.one.a");
+    }
+
+    private List<CellEvent> events = new ArrayList<>();
 
     private void givenIAmObserving(String path) {
-        engine.observe(Path.parse(path), event -> events.put(event.getType(), event));
+        engine.observe(Path.parse(path), events::add);
     }
 
     private void givenIAmObservingTheRoot() {
@@ -100,18 +142,25 @@ public class ObserveChanges extends CellsTest {
         engine.changeStem(Path.parse(path), new Path("°", "cell"));
     }
 
-
     private void whenIChangeTheReactionOf(String path) {
         engine.changeReaction(Path.parse(path), (receiver, message) -> {
         });
     }
 
     private void thenIShouldBeNotifiedAbout_For(CellEvent.Type type, String path) {
-        Assert.assertTrue("No [" + type + "] in " + events.keySet(), events.containsKey(type));
-        Assert.assertEquals(Path.parse(path), events.get(type).getPath());
+        thenIShouldBeNotified_TimeAbout_For(1, type, path);
     }
 
     private void thenIShouldHaveObserved_Events(int count) {
         Assert.assertEquals(count, events.size());
+    }
+
+    private void thenIShouldBeNotified_TimeAbout_For(int count, CellEvent.Type type, String path) {
+        for (CellEvent event : events) {
+            if (event.getType().equals(type) && event.getPath().equals(Path.parse(path))) {
+                count--;
+            }
+        }
+        Assert.assertEquals("Could not find [" + type + "] event for [" + path + "]", 0, count);
     }
 }

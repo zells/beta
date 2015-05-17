@@ -34,12 +34,11 @@ public class InheritedCell extends Cell {
 
     @Override
     public void observe(Observer observer) {
-        super.observe(observer);
         observers.add(observer);
     }
 
     private Cell adopt() {
-        Cell adopted = parent.add(getName(), child.getPath());
+        Cell adopted = parent.doAdd(getName(), child.getPath());
         for (Observer o : observers) {
             adopted.observe(o);
         }
@@ -47,7 +46,7 @@ public class InheritedCell extends Cell {
     }
 
     @Override
-    public void setStem(Path stem) {
+    protected void doSetStem(Path stem) {
         adopt().setStem(stem);
     }
 
@@ -57,7 +56,7 @@ public class InheritedCell extends Cell {
     }
 
     @Override
-    public Cell add(String name, Path stem) {
+    protected Cell doAdd(String name, Path stem) {
         return adopt().add(name, stem);
     }
 
