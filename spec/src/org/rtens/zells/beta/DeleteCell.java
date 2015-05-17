@@ -37,6 +37,6 @@ public class DeleteCell extends CellsTest {
     }
 
     private void whenIDelete_Of(String child, String parent) {
-        engine.delete(Path.parse(parent), child);
+        engine.delete(Path.parse(parent).with(child));
     }
 }

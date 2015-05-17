@@ -20,14 +20,17 @@ public class SerialEngine implements Engine {
         root.add("cell", defaultStem);
     }
 
+    @Override
     public void send(Path cell, Path message) {
         resolve(cell).receive(message);
     }
 
+    @Override
     public void observe(Path path, Observer observer) {
         resolve(path).observe(observer);
     }
 
+    @Override
     public void create(Path parent, String name) {
         guardName(name);
         guardNotOwnChild(parent, name);
@@ -35,46 +38,71 @@ public class SerialEngine implements Engine {
         resolve(parent).add(name, defaultStem);
     }
 
+    @Override
     public void changeStem(Path cell, Path stem) {
         resolve(cell).setStem(stem);
     }
 
+    @Override
     public Path getStem(Path cell) {
         return resolve(cell).getStem();
     }
 
-    public void delete(Path parent, String child) {
-        guardExisting(parent.with(child));
+    @Override
+    public void delete(Path cell) {
+        Path parent = cell.parent();
+        String child = cell.last();
+
+        guardExisting(cell);
         guardOwnChild(parent, child);
 
         resolve(parent).remove(child);
     }
 
+    @Override
     public void rename(Path path, String name) {
-        guardName(name);
-        guardNotExisting(path.parent().with(name));
-
-        resolve(path).setName(name);
+        copy(path, path.parent(), name);
+        delete(path);
     }
 
+    @Override
     public Reaction getReaction(Path cell) {
         return resolve(cell).getReaction();
     }
 
+    @Override
     public void changeReaction(Path cell, Reaction reaction) {
         resolve(cell).setReaction(reaction);
     }
 
+    @Override
     public Reaction getOwnReaction(Path cell) {
         return resolve(cell).getOwnReaction();
     }
 
+    @Override
     public List<String> listChildren(Path parent) {
         return sortStrings(resolve(parent).getChildren());
     }
 
+    @Override
     public List<String> listOwnChildren(Path parent) {
         return sortStrings(resolve(parent).getOwnChildren());
+    }
+
+    @Override
+    public void copy(Path path, Path parent, String name) {
+        guardName(name);
+        guardNotExisting(parent.with(name));
+
+        Cell source = resolve(path);
+        Cell target = resolve(parent).add(name, source.getStem());
+
+        target.setReaction(source.getOwnReaction());
+
+        for (String child : source.getOwnChildren()) {
+            copy(path.with(child), target.getPath(), child);
+        }
     }
 
     private List<String> sortStrings(Set<String> children) {

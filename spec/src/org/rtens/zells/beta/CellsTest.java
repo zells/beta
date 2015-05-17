@@ -42,6 +42,7 @@ public class CellsTest {
     }
 
     protected void then_ShouldBeAChildOf(String name, String parent) {
-        Assert.assertTrue(engine.listChildren(Path.parse(parent)).contains(name));
+        Assert.assertTrue("No [" + name + "] in [" + parent + "]",
+                engine.listChildren(Path.parse(parent)).contains(name));
     }
 }

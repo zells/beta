@@ -3,7 +3,7 @@ package org.rtens.zells.beta;
 import org.junit.Test;
 
 /**
- * Renaming a cell is equivalent with deleting and re-creating it.
+ * Renaming a cell will create a copy with the new name and delete the original one.
  */
 public class RenameCell extends CellsTest {
 
@@ -42,7 +42,7 @@ public class RenameCell extends CellsTest {
         givenTheCell("foo.one");
         givenTheCell_WithTheStem("bar", "°.foo");
         whenITryToRename_Of_To("one", "bar", "two");
-        thenItShouldThrowAnException("Cannot rename an inherited cell");
+        thenItShouldThrowAnException("[bar.one] is inherited");
     }
 
     @Test

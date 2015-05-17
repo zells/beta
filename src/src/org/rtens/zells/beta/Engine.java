@@ -6,7 +6,7 @@ public interface Engine {
 
     void send(Path cell, Path message);
 
-    void observe(Path path, Observer observer);
+    void observe(Path cell, Observer observer);
 
     void create(Path parent, String name);
 
@@ -14,9 +14,9 @@ public interface Engine {
 
     Path getStem(Path cell);
 
-    void delete(Path parent, String child);
+    void delete(Path cell);
 
-    void rename(Path path, String name);
+    void rename(Path cell, String name);
 
     Reaction getReaction(Path cell);
 
@@ -27,4 +27,6 @@ public interface Engine {
     List<String> listChildren(Path parent);
 
     List<String> listOwnChildren(Path parent);
+
+    void copy(Path cell, Path parent, String name);
 }

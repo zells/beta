@@ -4,14 +4,17 @@ import org.rtens.zells.beta.CellEvent;
 import org.rtens.zells.beta.Observer;
 import org.rtens.zells.beta.Path;
 import org.rtens.zells.beta.Reaction;
-import org.rtens.zells.beta.events.*;
+import org.rtens.zells.beta.events.CellCreatedEvent;
+import org.rtens.zells.beta.events.CellDeletedEvent;
+import org.rtens.zells.beta.events.ChangedReactionEvent;
+import org.rtens.zells.beta.events.ChangedStemEvent;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Cell implements Observer {
+    private final String name;
     private Cell parent;
-    private String name;
     private Path stem;
     private Set<Cell> children = new HashSet<Cell>();
     private Reaction reaction;
@@ -48,12 +51,6 @@ public class Cell implements Observer {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        Path oldPath = getPath();
-        this.name = name;
-        fire(new CellRenamedEvent(oldPath));
     }
 
     public void setReaction(Reaction reaction) {

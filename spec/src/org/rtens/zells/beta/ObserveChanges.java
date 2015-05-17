@@ -2,7 +2,10 @@ package org.rtens.zells.beta;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.rtens.zells.beta.events.*;
+import org.rtens.zells.beta.events.CellCreatedEvent;
+import org.rtens.zells.beta.events.CellDeletedEvent;
+import org.rtens.zells.beta.events.ChangedReactionEvent;
+import org.rtens.zells.beta.events.ChangedStemEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +20,7 @@ public class ObserveChanges extends CellsTest {
         givenTheCell("foo");
         givenIAmObservingTheRoot();
         whenICreate_In("bar", "foo");
-        thenIShouldBeNotifiedAboutThe_Cell(CellCreatedEvent.class, "°.foo.bar");
+        thenIShouldBeNotifiedAbout_For(CellCreatedEvent.class, "°.foo.bar");
     }
 
     @Test
@@ -33,7 +36,7 @@ public class ObserveChanges extends CellsTest {
         givenIAmObservingTheRoot();
         givenTheCell("foo.bar.baz");
         whenIDelete("foo.bar.baz");
-        thenIShouldBeNotifiedAboutThe_Cell(CellDeletedEvent.class, "°.foo.bar.baz");
+        thenIShouldBeNotifiedAbout_For(CellDeletedEvent.class, "°.foo.bar.baz");
     }
 
     @Test
@@ -41,7 +44,7 @@ public class ObserveChanges extends CellsTest {
         givenIAmObservingTheRoot();
         givenTheCell("foo.bar");
         whenIChangeTheStemOf("foo.bar");
-        thenIShouldBeNotifiedAboutThe_Cell(ChangedStemEvent.class, "°.foo.bar");
+        thenIShouldBeNotifiedAbout_For(ChangedStemEvent.class, "°.foo.bar");
     }
 
     @Test
@@ -49,7 +52,7 @@ public class ObserveChanges extends CellsTest {
         givenIAmObservingTheRoot();
         givenTheCell("foo.bar");
         whenIChangeTheReactionOf("foo.bar");
-        thenIShouldBeNotifiedAboutThe_Cell(ChangedReactionEvent.class, "°.foo.bar");
+        thenIShouldBeNotifiedAbout_For(ChangedReactionEvent.class, "°.foo.bar");
     }
 
     @Test
@@ -57,12 +60,8 @@ public class ObserveChanges extends CellsTest {
         givenIAmObservingTheRoot();
         givenTheCell("foo.bar");
         whenIChangeTheNameOf_To("foo.bar", "baz");
-        thenIShouldBeNotifiedAboutThe_Cell(CellRenamedEvent.class, "°.foo.bar");
-    }
-
-    @Test
-    public void NotifyAboutChangesInStem() {
-        Assert.fail("TBC");
+        thenIShouldBeNotifiedAbout_For(CellDeletedEvent.class, "°.foo.bar");
+        thenIShouldBeNotifiedAbout_For(CellCreatedEvent.class, "°.foo.baz");
     }
 
     private Map<Class, CellEvent> events = new HashMap<>();
@@ -80,7 +79,7 @@ public class ObserveChanges extends CellsTest {
     }
 
     private void whenIDelete(String path) {
-        engine.delete(Path.parse(path).parent(), Path.parse(path).last());
+        engine.delete(Path.parse(path));
     }
 
     private void whenIChangeTheStemOf(String path) {
@@ -96,7 +95,7 @@ public class ObserveChanges extends CellsTest {
         });
     }
 
-    private void thenIShouldBeNotifiedAboutThe_Cell(Class event, String path) {
+    private void thenIShouldBeNotifiedAbout_For(Class event, String path) {
         Assert.assertTrue(events.containsKey(event));
         Assert.assertTrue(events.get(event).getPath().equals(Path.parse(path)));
     }
