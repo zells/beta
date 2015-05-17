@@ -51,4 +51,9 @@ public class Path {
     public boolean equals(Object obj) {
         return obj instanceof Path && ((Path) obj).parts.equals(parts);
     }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
 }
