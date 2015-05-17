@@ -60,6 +60,11 @@ public class ObserveChanges extends CellsTest {
         thenIShouldBeNotifiedAboutThe_Cell(CellRenamedEvent.class, "°.foo.bar");
     }
 
+    @Test
+    public void NotifyAboutChangesInStem() {
+        Assert.fail("TBC");
+    }
+
     private Map<Class, CellEvent> events = new HashMap<>();
 
     private void givenIAmObserving(String path) {
