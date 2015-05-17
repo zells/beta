@@ -119,14 +119,25 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void InheritChildrenOfInheritedChildren() {
-        givenTheCell_WithTheStem("meh", "°.baz");
-        givenTheCell_WithTheStem("baz.one", "°.bar");
-        givenTheCell_WithTheStem("bar.two", "°.foo");
         givenTheCell("foo.three");
+        givenTheCell_WithTheStem("bar.two", "°.foo");
+        givenTheCell_WithTheStem("baz.one", "°.bar");
+        givenTheCell_WithTheStem("meh", "°.baz");
 
         whenIListTheChildrenOf("meh.one.two");
         thenIShouldGet_Cells(1);
         then_ShouldBeAChild("three");
+    }
+
+    @Test
+    public void InheritGrandChildren() {
+        givenTheCell("bar");
+        givenTheCell("stem.one.a");
+        givenTheCell_WithTheStem("foo", "°.stem");
+
+        whenIListTheChildrenOf("foo.one");
+        thenIShouldGet_Cells(1);
+        then_ShouldBeAChild("a");
     }
 
     @Test

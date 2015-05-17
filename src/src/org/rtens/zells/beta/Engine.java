@@ -16,8 +16,6 @@ public interface Engine {
 
     void delete(Path cell);
 
-    void rename(Path cell, String name);
-
     Reaction getReaction(Path cell);
 
     Reaction getOwnReaction(Path cell);

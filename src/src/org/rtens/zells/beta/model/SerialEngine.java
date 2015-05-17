@@ -60,12 +60,6 @@ public class SerialEngine implements Engine {
     }
 
     @Override
-    public void rename(Path path, String name) {
-        copy(path, path.parent(), name);
-        delete(path);
-    }
-
-    @Override
     public Reaction getReaction(Path cell) {
         return resolve(cell).getReaction();
     }
@@ -100,7 +94,7 @@ public class SerialEngine implements Engine {
 
         target.setReaction(source.getOwnReaction());
 
-        for (String child : source.getOwnChildren()) {
+        for (String child : source.getChildren()) {
             copy(path.with(child), target.getPath(), child);
         }
     }

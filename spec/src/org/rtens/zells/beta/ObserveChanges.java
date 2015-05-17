@@ -55,15 +55,6 @@ public class ObserveChanges extends CellsTest {
         thenIShouldBeNotifiedAbout_For(ChangedReactionEvent.class, "°.foo.bar");
     }
 
-    @Test
-    public void NotifyAboutChangedName() {
-        givenIAmObservingTheRoot();
-        givenTheCell("foo.bar");
-        whenIChangeTheNameOf_To("foo.bar", "baz");
-        thenIShouldBeNotifiedAbout_For(CellDeletedEvent.class, "°.foo.bar");
-        thenIShouldBeNotifiedAbout_For(CellCreatedEvent.class, "°.foo.baz");
-    }
-
     private Map<Class, CellEvent> events = new HashMap<>();
 
     private void givenIAmObserving(String path) {
@@ -84,10 +75,6 @@ public class ObserveChanges extends CellsTest {
 
     private void whenIChangeTheStemOf(String path) {
         engine.changeStem(Path.parse(path), new Path("foo"));
-    }
-
-    private void whenIChangeTheNameOf_To(String path, String name) {
-        engine.rename(Path.parse(path), name);
     }
 
     private void whenIChangeTheReactionOf(String path) {

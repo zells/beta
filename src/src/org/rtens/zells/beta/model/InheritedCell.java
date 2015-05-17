@@ -25,6 +25,11 @@ public class InheritedCell extends Cell {
     }
 
     @Override
+    public Set<String> getChildren() {
+        return child.getChildren();
+    }
+
+    @Override
     public void setStem(Path stem) {
         parent.add(getName(), stem);
     }
