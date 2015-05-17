@@ -2,10 +2,6 @@ package org.rtens.zells.beta;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.rtens.zells.beta.events.CellCreatedEvent;
-import org.rtens.zells.beta.events.CellDeletedEvent;
-import org.rtens.zells.beta.events.ChangedReactionEvent;
-import org.rtens.zells.beta.events.ChangedStemEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +16,7 @@ public class ObserveChanges extends CellsTest {
         givenTheCell("foo");
         givenIAmObservingTheRoot();
         whenICreate_In("bar", "foo");
-        thenIShouldBeNotifiedAbout_For(CellCreatedEvent.class, "°.foo.bar");
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "°.foo.bar");
     }
 
     @Test
@@ -36,7 +32,7 @@ public class ObserveChanges extends CellsTest {
         givenIAmObservingTheRoot();
         givenTheCell("foo.bar.baz");
         whenIDelete("foo.bar.baz");
-        thenIShouldBeNotifiedAbout_For(CellDeletedEvent.class, "°.foo.bar.baz");
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.Deleted, "°.foo.bar.baz");
     }
 
     @Test
@@ -44,7 +40,7 @@ public class ObserveChanges extends CellsTest {
         givenIAmObservingTheRoot();
         givenTheCell("foo.bar");
         whenIChangeTheStemOf("foo.bar");
-        thenIShouldBeNotifiedAbout_For(ChangedStemEvent.class, "°.foo.bar");
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.ChangedStem, "°.foo.bar");
     }
 
     @Test
@@ -52,13 +48,40 @@ public class ObserveChanges extends CellsTest {
         givenIAmObservingTheRoot();
         givenTheCell("foo.bar");
         whenIChangeTheReactionOf("foo.bar");
-        thenIShouldBeNotifiedAbout_For(ChangedReactionEvent.class, "°.foo.bar");
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.ChangedReaction, "°.foo.bar");
     }
 
-    private Map<Class, CellEvent> events = new HashMap<>();
+    @Test
+    public void NotifyAboutChangesInStem() {
+        givenTheCell("stem");
+        givenTheCell_WithTheStem("foo", "°.stem");
+        givenIAmObserving("foo");
+
+        whenICreate_In("bar", "stem");
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "foo.bar");
+    }
+
+    @Test
+    public void AdoptObservers() {
+        givenTheCell("top.one");
+        givenTheCell_WithTheStem("stem", "°.top");
+        givenTheCell_WithTheStem("foo", "°.stem.one");
+
+        whenICreate_In("a", "stem.one");
+
+        givenIAmObserving("foo");
+        whenICreate_In("b", "stem.one");
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "foo.b");
+
+        givenIAmObserving("foo");
+        whenICreate_In("c", "top.one");
+        thenIShouldBeNotifiedAbout_For(CellEvent.Type.Created, "foo.c");
+    }
+
+    private Map<CellEvent.Type, CellEvent> events = new HashMap<>();
 
     private void givenIAmObserving(String path) {
-        engine.observe(Path.parse(path), event -> events.put(event.getClass(), event));
+        engine.observe(Path.parse(path), event -> events.put(event.getType(), event));
     }
 
     private void givenIAmObservingTheRoot() {
@@ -74,17 +97,18 @@ public class ObserveChanges extends CellsTest {
     }
 
     private void whenIChangeTheStemOf(String path) {
-        engine.changeStem(Path.parse(path), new Path("foo"));
+        engine.changeStem(Path.parse(path), new Path("°", "cell"));
     }
+
 
     private void whenIChangeTheReactionOf(String path) {
         engine.changeReaction(Path.parse(path), (receiver, message) -> {
         });
     }
 
-    private void thenIShouldBeNotifiedAbout_For(Class event, String path) {
-        Assert.assertTrue(events.containsKey(event));
-        Assert.assertTrue(events.get(event).getPath().equals(Path.parse(path)));
+    private void thenIShouldBeNotifiedAbout_For(CellEvent.Type type, String path) {
+        Assert.assertTrue("No [" + type + "] in " + events.keySet(), events.containsKey(type));
+        Assert.assertEquals(Path.parse(path), events.get(type).getPath());
     }
 
     private void thenIShouldHaveObserved_Events(int count) {

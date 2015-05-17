@@ -1,17 +1,20 @@
 package org.rtens.zells.beta.model;
 
+import org.rtens.zells.beta.Observer;
 import org.rtens.zells.beta.Path;
 import org.rtens.zells.beta.Reaction;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class InheritedCell extends Cell {
 
     private Cell parent;
     private Cell child;
+    private Set<Observer> observers = new HashSet<Observer>();
 
     public InheritedCell(Cell parent, Cell child) {
-        super(parent, child.getName(), child.getStem());
+        super(parent, child.getName());
         this.parent = parent;
         this.child = child;
     }
@@ -30,18 +33,32 @@ public class InheritedCell extends Cell {
     }
 
     @Override
+    public void observe(Observer observer) {
+        super.observe(observer);
+        observers.add(observer);
+    }
+
+    private Cell adopt() {
+        Cell adopted = parent.add(getName(), child.getPath());
+        for (Observer o : observers) {
+            adopted.observe(o);
+        }
+        return adopted;
+    }
+
+    @Override
     public void setStem(Path stem) {
-        parent.add(getName(), stem);
+        adopt().setStem(stem);
     }
 
     @Override
     public void setReaction(Reaction reaction) {
-        parent.add(getName(), child.getPath()).setReaction(reaction);
+        adopt().setReaction(reaction);
     }
 
     @Override
     public Cell add(String name, Path stem) {
-        return parent.add(getName(), child.getPath()).add(name, stem);
+        return adopt().add(name, stem);
     }
 
     @Override

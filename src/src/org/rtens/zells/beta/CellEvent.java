@@ -1,14 +1,27 @@
 package org.rtens.zells.beta;
 
-abstract public class CellEvent {
+public class CellEvent {
 
-    private final Path path;
+    public enum Type {
+        Created,
+        Deleted,
+        ChangedReaction,
+        ChangedStem
+    }
 
-    public CellEvent(Path path) {
+    private Type type;
+    private Path path;
+
+    public CellEvent(Type type, Path path) {
+        this.type = type;
         this.path = path;
     }
 
     public Path getPath() {
         return path;
+    }
+
+    public Type getType() {
+        return type;
     }
 }

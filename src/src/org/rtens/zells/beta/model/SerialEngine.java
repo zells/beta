@@ -16,8 +16,8 @@ public class SerialEngine implements Engine {
     private final Path defaultStem = new Path("°", "cell");
 
     public SerialEngine() {
-        root = new Cell(null, "°", defaultStem);
-        root.add("cell", defaultStem);
+        root = new Cell(null, "°");
+        root.add("cell", null);
     }
 
     @Override

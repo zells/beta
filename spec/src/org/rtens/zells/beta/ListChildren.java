@@ -142,8 +142,8 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void StemPathIsRelative() {
-        givenTheCell_WithTheStem("foo.bar", "baz");
         givenTheCell("foo.bar.baz.one");
+        givenTheCell_WithTheStem("foo.bar", "baz");
         whenIListTheChildrenOf("foo.bar");
 
         thenIShouldGet_Cells(2);
@@ -153,27 +153,12 @@ public class ListChildren extends CellsTest {
 
     @Test
     public void CatchInheritanceLoop() {
-        givenTheCell_WithTheStem("foo", "°.baz");
+        givenTheCell("foo");
         givenTheCell_WithTheStem("bar", "°.foo");
         givenTheCell_WithTheStem("baz", "°.bar");
+        givenTheCell_WithTheStem("foo", "°.foo");
         whenIListTheChildrenOf("foo");
         thenIShouldGet_Cells(0);
-
-    }
-
-    @Test
-    public void NotExistingStem() {
-        givenTheCell_WithTheStem("foo", "bar");
-        whenITryToListTheChildrenOf("foo");
-        thenItShouldThrowAnException("Could not find [bar]");
-    }
-
-    private void whenITryToListTheChildrenOf(String path) {
-        try {
-            whenIListTheChildrenOf(path);
-        } catch (Exception e) {
-            caught = e;
-        }
     }
 
     private List<String> children = new ArrayList<>();
