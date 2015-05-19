@@ -1,11 +1,13 @@
 package org.rtens.zells.beta.model;
 
-import org.rtens.zells.beta.CellEvent;
 import org.rtens.zells.beta.Observer;
 import org.rtens.zells.beta.Path;
 import org.rtens.zells.beta.Reaction;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Cell implements Observer {
 
@@ -16,13 +18,6 @@ public class Cell implements Observer {
     private Reaction reaction;
     private Set<Observer> observers = new HashSet<Observer>();
     private Map<String, InheritedCell> inheritedChildren = new HashMap<String, InheritedCell>();
-
-    private Observer stemObserver = new Observer() {
-        @Override
-        public void on(CellEvent event) {
-            Cell.this.on(new StrippedEvent(event));
-        }
-    };
 
     public Cell(Cell parent, String name) {
         this.parent = parent;
@@ -49,18 +44,18 @@ public class Cell implements Observer {
 
     public void setStem(Path stem) {
         doSetStem(stem);
-        fire(new CellEvent(CellEvent.Type.ChangedStem, new Path()));
+        fire();
     }
 
     protected void doSetStem(Path stem) {
         if (this.stem != null) {
-            resolve(this.stem).observers.remove(stemObserver);
+            resolve(this.stem).observers.remove(this);
         }
 
         this.stem = stem;
 
         if (stem != null) {
-            resolve(stem).observe(stemObserver);
+            resolve(stem).observe(this);
         }
     }
 
@@ -70,7 +65,7 @@ public class Cell implements Observer {
 
     public void setReaction(Reaction reaction) {
         this.reaction = reaction;
-        fire(new CellEvent(CellEvent.Type.ChangedReaction, new Path()));
+        fire();
     }
 
     public Reaction getReaction() {
@@ -86,7 +81,7 @@ public class Cell implements Observer {
 
     public Cell add(String name, Path stem) {
         Cell child = doAdd(name, stem);
-        fire(new CellEvent(CellEvent.Type.Created, new Path(name)));
+        fire();
         return child;
     }
 
@@ -94,7 +89,6 @@ public class Cell implements Observer {
         final Cell child = new Cell(this, name);
         child.doSetStem(stem);
         children.add(child);
-        child.observe(this);
         return child;
     }
 
@@ -102,7 +96,7 @@ public class Cell implements Observer {
         for (Cell child : children) {
             if (child.name.equals(name)) {
                 children.remove(child);
-                fire(new CellEvent(CellEvent.Type.Deleted, new Path(name)));
+                fire();
                 return;
             }
         }
@@ -183,60 +177,30 @@ public class Cell implements Observer {
         observers.add(observer);
     }
 
-    private void fire(CellEvent event) {
-        event = new WrappedEvent(event);
+    private void fire() {
+        fire(new HashSet<Cell>());
+    }
+
+    private void fire(Set<Cell> cells) {
         for (Observer o : observers) {
-            o.on(event);
+            if (o instanceof Cell) {
+                ((Cell) o).stemChanged(cells);
+            } else {
+                o.cellChanged(getPath());
+            }
         }
+    }
+
+    private void stemChanged(Set<Cell> cells) {
+        if (cells.contains(this)) {
+            return;
+        }
+        cells.add(this);
+        fire(cells);
     }
 
     @Override
-    public void on(CellEvent event) {
-        if (event instanceof ForwardedEvent && ((ForwardedEvent) event).wasCaughtBy(this)) {
-            return;
-        }
-        fire(new ForwardedEvent(event, this));
-    }
-
-    private class ForwardedEvent extends CellEvent {
-        private final Cell catcher;
-        private ForwardedEvent before;
-
-        public ForwardedEvent(CellEvent event, Cell catcher) {
-            super(event.getType(), event.getPath());
-            this.catcher = catcher;
-            if (event instanceof ForwardedEvent) {
-                before = (ForwardedEvent) event;
-            }
-        }
-
-        private boolean wasCaughtBy(Cell cell) {
-            return catcher == cell || before != null && before.wasCaughtBy(cell);
-        }
-    }
-
-    private class WrappedEvent extends ForwardedEvent {
-        public WrappedEvent(CellEvent event) {
-            super(event, null);
-        }
-
-        @Override
-        public Path getPath() {
-            List<String> parts = new ArrayList<String>(super.getPath().getParts());
-            parts.add(0, Cell.this.name);
-
-            return new Path(parts);
-        }
-    }
-
-    private class StrippedEvent extends ForwardedEvent {
-        public StrippedEvent(CellEvent event) {
-            super(event, null);
-        }
-
-        @Override
-        public Path getPath() {
-            return new Path(super.getPath().getParts().subList(1, super.getPath().getParts().size()));
-        }
+    public void cellChanged(Path cell) {
+        fire();
     }
 }
