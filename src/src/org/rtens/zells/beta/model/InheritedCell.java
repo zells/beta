@@ -34,6 +34,7 @@ public class InheritedCell extends Cell {
 
     @Override
     public void observe(Observer observer) {
+        child.observe(observer);
         observers.add(observer);
     }
 

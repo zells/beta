@@ -59,6 +59,16 @@ public class ObserveChanges extends CellsTest {
     }
 
     @Test
+    public void NotifyAboutChangesInInheritedChild() {
+        givenTheCell("foo.one");
+        givenTheCell_WithTheStem("bar", "°.foo");
+        givenIAmObserving("bar.one");
+
+        whenICreate_In("baz", "°.foo.one");
+        thenIShouldBeNotifiedAboutAChange();
+    }
+
+    @Test
     public void StopObservingOldStem() {
         givenTheCell("stem");
         givenTheCell("other");
@@ -85,6 +95,18 @@ public class ObserveChanges extends CellsTest {
 
         whenICreate_In("c", "top.one");
         thenIShouldBeNotifiedAboutAChange();
+    }
+
+    @Test
+    public void StopObservingInheritedChildAfterAdoption() {
+        givenTheCell("foo.one");
+        givenTheCell_WithTheStem("bar", "°.foo");
+        whenIChangeTheStemOf("bar.one");
+
+        givenIAmObserving("bar.one");
+        whenICreate_In("two", "°.foo.one");
+
+        thenIShouldNotBeNotifiedAboutAChange();
     }
 
     @Test
