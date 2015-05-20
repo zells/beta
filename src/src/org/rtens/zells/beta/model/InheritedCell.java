@@ -46,6 +46,11 @@ public class InheritedCell extends Cell {
     }
 
     @Override
+    public Path getStem() {
+        return child.getStem();
+    }
+
+    @Override
     protected void doSetStem(Path stem) {
         adopt().setStem(stem);
     }

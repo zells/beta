@@ -17,6 +17,14 @@ public class ChangeStemCell extends CellsTest {
     }
 
     @Test
+    public void InheritStem() {
+        givenTheCell("foo");
+        givenTheCell_WithTheStem("bar.one", "°.foo");
+        givenTheCell_WithTheStem("baz", "°.bar");
+        thenTheStemCellOf_ShouldBe("baz.one", "°.foo");
+    }
+
+    @Test
     public void AdoptInheritedChild() {
         givenTheCell("inherited");
         givenTheCell("adopted");
