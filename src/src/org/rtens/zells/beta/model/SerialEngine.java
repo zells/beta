@@ -87,7 +87,7 @@ public class SerialEngine implements Engine {
     @Override
     public void copy(Path path, Path parent, String name) {
         guardName(name);
-        guardNotExisting(parent.with(name));
+        guardNotOwnChild(parent, name);
 
         Cell source = resolve(path);
         Cell target = resolve(parent).add(name, source.getStem());

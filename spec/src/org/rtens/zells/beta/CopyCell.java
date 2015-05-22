@@ -87,6 +87,14 @@ public class CopyCell extends CellsTest {
         then_ShouldHaveTheSameReaction("foo.baz.two.b");
     }
 
+    @Test
+    public void CopyWithInheritedChildren() {
+        givenTheCell("stem.foo");
+        givenTheCell_WithTheStem("bar", "°.stem");
+        whenICopy_To("bar", "°", "baz");
+        then_ShouldBeAChildOf("foo", "baz");
+    }
+
     private Reaction reaction;
 
     private void given_HasAReaction(String path) {
