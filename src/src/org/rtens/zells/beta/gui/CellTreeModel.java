@@ -38,7 +38,7 @@ public class CellTreeModel implements TreeModel {
 
     @Override
     public void valueForPathChanged(TreePath path, Object newValue) {
-        System.out.println("New Value " + newValue);
+        ((CellTreeNode) path.getLastPathComponent()).changeValue((String) newValue);
     }
 
     @Override

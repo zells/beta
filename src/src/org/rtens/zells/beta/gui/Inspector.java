@@ -40,7 +40,16 @@ public class Inspector extends JPanel implements ActionListener {
         String command = e.getActionCommand();
 
         if (ADD_COMMAND.equals(command)) {
-            tree.addCell("Cell " + newNodeSuffix++);
+
+            String name = JOptionPane.showInputDialog(this, "Name:");
+            if (name != null) {
+                String stem = JOptionPane.showInputDialog(this, "Stem:", "°.cell");
+                if (stem != null) {
+                    tree.addCell(name, stem);
+                } else {
+                    tree.addCell(name);
+                }
+            }
         } else if (REMOVE_COMMAND.equals(command)) {
             tree.removeCell();
         }

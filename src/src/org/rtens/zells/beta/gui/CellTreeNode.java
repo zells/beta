@@ -17,6 +17,7 @@ public class CellTreeNode implements TreeNode, Observer {
     private final CellTreeNode parent;
     private List<CellTreeNode> children;
     private CellTreeModel model;
+    private boolean failed = false;
 
     public CellTreeNode(Engine engine, Path path, CellTreeNode parent) {
         this.engine = engine;
@@ -83,11 +84,17 @@ public class CellTreeNode implements TreeNode, Observer {
     }
 
     private List<String> listChildren() {
-        try {
-            return engine.listChildren(path);
-        } catch (Exception e) {
-            return engine.listOwnChildren(path);
-        }
+        return new Runner<List<String>>("reading children") {
+            @Override
+            public List<String> run() {
+                return engine.listChildren(path);
+            }
+
+            @Override
+            public List<String> failed() {
+                return engine.listOwnChildren(path);
+            }
+        }.tryToRun();
     }
 
     public void setModel(CellTreeModel model) {
@@ -118,5 +125,59 @@ public class CellTreeNode implements TreeNode, Observer {
 
     public Path getPath() {
         return path;
+    }
+
+    public boolean hasFailed() {
+        return failed;
+    }
+
+    public boolean isOwnChild() {
+        return parent == null || engine.listOwnChildren(parent.getPath()).contains(path.last());
+    }
+
+    public void changeValue(String newValue) {
+        final String[] nameAndStem = newValue.split(":");
+
+        new Runner("changing stem") {
+            @Override
+            public Object run() {
+                engine.changeStem(path, Path.parse(nameAndStem[1].trim()));
+                return null;
+            }
+        }.tryToRun();
+
+        new Runner("renaming") {
+            @Override
+            public Object run() {
+                engine.copy(path, path.parent(), nameAndStem[0]);
+                engine.delete(path);
+                return null;
+            }
+        }.tryToRun();
+    }
+
+    private abstract class Runner<T> {
+        private String action;
+
+        public Runner(String action) {
+            this.action = action;
+        }
+
+        public abstract T run();
+
+        public T failed() {
+            return null;
+        }
+
+        public T tryToRun() {
+            try {
+                failed = false;
+                return run();
+            } catch (Exception e) {
+                failed = true;
+                System.err.println("Error while " + action + " of " + path + ": " + e.getMessage());
+                return failed();
+            }
+        }
     }
 }
