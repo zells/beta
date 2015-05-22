@@ -9,7 +9,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 
-public class CellTree extends JPanel {
+public class CellTree extends JPanel implements CellTreeNode.ErrorListener {
 
     private final Engine engine;
     private final JTree tree;
@@ -25,7 +25,7 @@ public class CellTree extends JPanel {
         engine.create(new Path(), "three");
         engine.changeStem(new Path("one"), new Path("°", "two"));
 
-        root = new CellTreeNode(engine, new Path("°"), null);
+        root = new CellTreeNode(engine, new Path("°"), null, this);
         CellTreeModel model = new CellTreeModel(root);
         root.setModel(model);
 
@@ -63,6 +63,11 @@ public class CellTree extends JPanel {
 
     private CellTreeNode getSelectedNode() {
         return (CellTreeNode) tree.getLastSelectedPathComponent();
+    }
+
+    @Override
+    public void onError(String message) {
+        System.err.println(message);
     }
 
     private class CellTreeCellRenderer implements TreeCellRenderer {

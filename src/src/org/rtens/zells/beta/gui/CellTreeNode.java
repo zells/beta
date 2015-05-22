@@ -18,11 +18,13 @@ public class CellTreeNode implements TreeNode, Observer {
     private List<CellTreeNode> children;
     private CellTreeModel model;
     private boolean failed = false;
+    private ErrorListener errorListener;
 
-    public CellTreeNode(Engine engine, Path path, CellTreeNode parent) {
+    public CellTreeNode(Engine engine, Path path, CellTreeNode parent, ErrorListener error) {
         this.engine = engine;
         this.path = path;
         this.parent = parent;
+        this.errorListener = error;
 
         engine.observe(path, this);
     }
@@ -75,7 +77,7 @@ public class CellTreeNode implements TreeNode, Observer {
         if (children == null) {
             children = new ArrayList<CellTreeNode>();
             for (String child : listChildren()) {
-                CellTreeNode node = new CellTreeNode(engine, path.with(child), this);
+                CellTreeNode node = new CellTreeNode(engine, path.with(child), this, errorListener);
                 node.setModel(model);
                 children.add(node);
             }
@@ -137,23 +139,29 @@ public class CellTreeNode implements TreeNode, Observer {
 
     public void changeValue(String newValue) {
         final String[] nameAndStem = newValue.split(":");
+        final String name = nameAndStem[0].trim();
+        final Path stem = Path.parse(nameAndStem[1].trim());
 
-        new Runner("changing stem") {
-            @Override
-            public Object run() {
-                engine.changeStem(path, Path.parse(nameAndStem[1].trim()));
-                return null;
-            }
-        }.tryToRun();
+        if (!stem.equals(engine.getStem(path))) {
+            new Runner("changing stem") {
+                @Override
+                public Object run() {
+                    engine.changeStem(path, stem);
+                    return null;
+                }
+            }.tryToRun();
+        }
 
-        new Runner("renaming") {
-            @Override
-            public Object run() {
-                engine.copy(path, path.parent(), nameAndStem[0]);
-                engine.delete(path);
-                return null;
-            }
-        }.tryToRun();
+        if (!name.equals(path.last())) {
+            new Runner("renaming") {
+                @Override
+                public Object run() {
+                    engine.copy(path, path.parent(), name);
+                    engine.delete(path);
+                    return null;
+                }
+            }.tryToRun();
+        }
     }
 
     private abstract class Runner<T> {
@@ -175,9 +183,15 @@ public class CellTreeNode implements TreeNode, Observer {
                 return run();
             } catch (Exception e) {
                 failed = true;
-                System.err.println("Error while " + action + " of " + path + ": " + e.getMessage());
+                if (errorListener != null) {
+                    errorListener.onError("Error while " + action + " of " + path + ": " + e.getMessage());
+                }
                 return failed();
             }
         }
+    }
+
+    public interface ErrorListener {
+        void onError(String message);
     }
 }
