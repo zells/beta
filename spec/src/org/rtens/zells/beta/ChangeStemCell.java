@@ -44,6 +44,21 @@ public class ChangeStemCell extends CellsTest {
         thenItShouldThrowAnException("Could not find [non]");
     }
 
+    @Test
+    public void ChangeNoExistingStem() {
+        givenTheCell("stem");
+        givenTheCell_WithANonExistingStem("foo", "non");
+        whenISetTheStemOf_To("foo", "°.stem");
+        thenTheStemCellOf_ShouldBe("foo", "°.stem");
+    }
+
+    private void givenTheCell_WithANonExistingStem(String path, String stem) {
+        try {
+            givenTheCell_WithTheStem(path, stem);
+        } catch (Exception ignored) {
+        }
+    }
+
     private void whenITryToSetTheStemOf_To(String path, String stem) {
         try {
             whenISetTheStemOf_To(path, stem);

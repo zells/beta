@@ -49,7 +49,10 @@ public class Cell implements Observer {
 
     protected void doSetStem(Path stem) {
         if (this.stem != null) {
-            resolve(this.stem).observers.remove(this);
+            try {
+                resolve(this.stem).observers.remove(this);
+            } catch (Exception ignored) {
+            }
         }
 
         this.stem = stem;
